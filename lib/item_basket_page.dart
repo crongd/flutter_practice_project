@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_practice_project/models/product.dart';
+import 'package:flutter_practice_project/models/ProductDTO.dart';
 import 'package:intl/intl.dart';
 
 import 'constants.dart';
@@ -38,7 +38,8 @@ class _ItemBasketPage extends State<ItemBasketPage> {
               alignment: Alignment.center,
               padding: const EdgeInsets.all(15),
               child: CachedNetworkImage(
-                width: MediaQuery.of(context).size.width * 0.8,
+                width: MediaQuery.of(context).size.width * 0.7,
+                height: MediaQuery.of(context).size.height * 0.3,
                 imageUrl: widget.productImageUrl,
                 fit: BoxFit.cover,
                 placeholder: (context, url) {
