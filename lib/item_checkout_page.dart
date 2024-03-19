@@ -5,17 +5,17 @@ import 'package:intl/intl.dart';
 
 import 'constants.dart';
 
-class ItemBasketPage extends StatefulWidget {
+class ItemCheckoutPage extends StatefulWidget {
 
-  ItemBasketPage({super.key});
+  ItemCheckoutPage({super.key});
 
 
   @override
-  State<ItemBasketPage> createState() => _ItemBasketPage();
+  State<ItemCheckoutPage> createState() => _ItemCheckoutPage();
 
 }
 
-class _ItemBasketPage extends State<ItemBasketPage> {
+class _ItemCheckoutPage extends State<ItemCheckoutPage> {
   List<ProductDTO> basketList = [
     ProductDTO(
       no: 1,
@@ -50,13 +50,13 @@ class _ItemBasketPage extends State<ItemBasketPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("장바구니 페이지"),
+        title: const Text("결제시작 페이지"),
         centerTitle: true,
       ),
       body: ListView.builder(
-        itemCount: basketList.length,
+        itemCount: checkoutList.length,
         itemBuilder: (context, index) {
-          return basketContainer(
+          return checkoutContainer(
               no: basketList[index].no ?? 0,
               title: basketList[index].title ?? "",
               mainImg: basketList[index].mainImg ?? "",
@@ -74,7 +74,7 @@ class _ItemBasketPage extends State<ItemBasketPage> {
     );
   }
 
-  Widget basketContainer({
+  Widget checkoutContainer({
     required int no,
     required String title,
     required String mainImg,

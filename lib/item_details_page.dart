@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_practice_project/models/ProductDTO.dart';
 import 'package:intl/intl.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_practice_project/item_basket_page.dart';
 
 import 'constants.dart';
 
@@ -33,7 +34,7 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
   void initState() {
     super.initState();
     no = widget.no;
-    test2();
+    product_get();
 
   }
 
@@ -58,9 +59,9 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
     );
   }
 
-  void test2() async {
+  void product_get() async {
     // print(no);
-    Response response = await Dio().get('http://localhost:8080/test2?no=$no');
+    Response response = await Dio().get('http://localhost:8080/product?no=$no');
     dynamic responseData = response.data;
     // print(responseData);
     ProductDTO resultData = ProductDTO.fromJson(json: responseData);
@@ -71,38 +72,10 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
         images.add(image(img));
       });
     });
-    print(images);
+    // print(images);
 
   }
 
-   Future<void> _basket() async {
-    return showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return AlertDialog(
-            title: Text("가나다"),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: [
-                  Text('alert dialog'),
-                  Text('ok를 눌러'),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(onPressed: () {
-                Navigator.of(context).pop();
-              }, child: Text('ok')
-              ),
-              TextButton(onPressed: () {
-                Navigator.of(context).pop();
-              }, child: Text('취소')
-              ),
-            ],
-          );
-        });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -168,7 +141,13 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(20),
         child: FilledButton(
-          onPressed: _basket,
+          onPressed: () {
+            // 추후 장바구니 담는 로직 추가 예정
+            
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              return ItemBasketPage();
+            }));
+          },
           child: const Text("장바구니 담기"),
         ),
       ),

@@ -24,11 +24,11 @@ class _ItemListPageState extends State<ItemListPage> {
     // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
     //   test();
     // });
-    test();
+    get_product_list();
   }
 
-  void test() async {
-    Response response = await Dio().get("http://localhost:8080/test");
+  void get_product_list() async {
+    Response response = await Dio().get("http://localhost:8080/product_list");
     // print(response);
     List<dynamic> responseData = response.data;
     List<ProductDTO> products = responseData.map((json) => ProductDTO.fromJson(json: json)).toList();

@@ -1,7 +1,6 @@
 class ProductDTO {
   int? no;
   String? title;
-  String? productDetails;
   String? mainImg;
   List<String>? images;
   int? price;
@@ -9,7 +8,6 @@ class ProductDTO {
   ProductDTO({
     this.no,
     this.title,
-    this.productDetails,
     this.mainImg,
     this.images,
     this.price
@@ -18,7 +16,6 @@ class ProductDTO {
   ProductDTO.fromJson({required Map<String, dynamic> json}) {
     no = json['no'];
     title = json['title'];
-    // productDetails = json['productDetails'];
     mainImg = json['mainImg'];
     images = List<String>.from(json['images'] ?? []);
     price = json['price'];
@@ -28,7 +25,6 @@ class ProductDTO {
     final Map<String, dynamic> data = {};
     data['no'] = no;
     data['title'] = title;
-    // data['productDetails'] = productDetails;
     data['mainImg'] = mainImg;
     data['price'] = price;
     return data;
