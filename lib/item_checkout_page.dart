@@ -48,6 +48,7 @@ class _ItemCheckoutPage extends State<ItemCheckoutPage> {
 
   @override
   Widget build(BuildContext context) {
+    var checkoutList;
     return Scaffold(
       appBar: AppBar(
         title: const Text("결제시작 페이지"),

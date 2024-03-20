@@ -2,13 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_practice_project/item_details_page.dart';
 import 'package:flutter_practice_project/models/ProductDTO.dart';
+import 'package:flutter_practice_project/public/nav.dart';
 import 'package:intl/intl.dart';
 import 'package:dio/dio.dart';
 
+import 'public/appbar.dart';
 import 'constants.dart';
 
 class ItemListPage extends StatefulWidget {
-  const ItemListPage({super.key});
+  int no;
+
+  ItemListPage({super.key,
+    required this.no
+  });
 
   @override
   State<ItemListPage> createState() => _ItemListPageState();
@@ -28,13 +34,13 @@ class _ItemListPageState extends State<ItemListPage> {
   }
 
   void get_product_list() async {
-    Response response = await Dio().get("http://localhost:8080/product_list");
+    Response response = await Dio().get("http://localhost:8080/product_list?no=${widget.no}");
     // print(response);
     List<dynamic> responseData = response.data;
     List<ProductDTO> products = responseData.map((json) => ProductDTO.fromJson(json: json)).toList();
 
-    products.asMap().forEach((key, value) {
-      productList.add(value);
+    setState(() {
+        productList = products;
     });
 
     // print(productList);
@@ -44,10 +50,17 @@ class _ItemListPageState extends State<ItemListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("제품 리스트"),
+        title: Text("제품 리스트 페이지"),
         centerTitle: true,
+        leading: IconButton(onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => Screen()));
+        },
+          icon: Icon(Icons.menu),
+        ),
+        actions: [IconButton(onPressed: (){}, icon: Icon(Icons.login))],
       ),
       body: GridView.builder(
+
         itemCount: productList.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           childAspectRatio: 0.9,

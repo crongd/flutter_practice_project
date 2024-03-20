@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Shopping Mall',
-      home: ItemListPage(),
+      home: ItemListPage(no: 0),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,

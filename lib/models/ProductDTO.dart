@@ -4,13 +4,15 @@ class ProductDTO {
   String? mainImg;
   List<String>? images;
   int? price;
+  int? amount;
 
   ProductDTO({
     this.no,
     this.title,
     this.mainImg,
     this.images,
-    this.price
+    this.price,
+    this.amount
   });
 
   ProductDTO.fromJson({required Map<String, dynamic> json}) {
@@ -19,6 +21,7 @@ class ProductDTO {
     mainImg = json['mainImg'];
     images = List<String>.from(json['images'] ?? []);
     price = json['price'];
+    amount = json['amount'];
   }
 
   Map<String, dynamic> toJson() {
@@ -27,12 +30,19 @@ class ProductDTO {
     data['title'] = title;
     data['mainImg'] = mainImg;
     data['price'] = price;
+    data['amount'] = amount;
     return data;
   }
 
   @override
   String toString() {
-    return "ProductDTO{no: $no, title: $title, mainImg: $mainImg, images: $images, price: $price}";
+    return "ProductDTO{"
+        "no: $no,"
+        " title: $title,"
+        " mainImg: $mainImg,"
+        " images: $images,"
+        " price: $price,"
+        " amount: $amount}";
   }
 
 }

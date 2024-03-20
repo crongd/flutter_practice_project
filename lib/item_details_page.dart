@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_practice_project/public/appbar.dart';
 import 'package:flutter_practice_project/models/ProductDTO.dart';
 import 'package:intl/intl.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_practice_project/item_basket_page.dart';
+import 'package:flutter_practice_project/item_list_page.dart';
 
 import 'constants.dart';
 
@@ -65,9 +67,11 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
     dynamic responseData = response.data;
     // print(responseData);
     ProductDTO resultData = ProductDTO.fromJson(json: responseData);
-    print(resultData);
+    // print(resultData);
+
 
     resultData.images?.forEach((img) {
+      // print(img);
       setState(() {
         images.add(image(img));
       });
@@ -79,11 +83,9 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    String title = "제품 상세 페이지";
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("제품 상세 페이지"),
-        centerTitle: true,
-      ),
+      appBar: pub_app(title),
       body: SingleChildScrollView(
         child: Column(
           children: [
