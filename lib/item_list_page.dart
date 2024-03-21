@@ -22,37 +22,69 @@ class ItemListPage extends StatefulWidget {
 }
 
 class _ItemListPageState extends State<ItemListPage> {
-
   List<ProductDTO> productList = [];
   List<CategoryDTO> categoryList = [];
   String? selectedCategory;
+  int cateNo = 0;
+  String categoryName = "카테고리 선택";
 
 
   @override
   void initState() {
     super.initState();
+    cateNo = widget.no;
     get_product_list();
   }
 
   void get_product_list() async {
-    Response respProduct = await Dio().get("http://localhost:8080/product_list?no=${widget.no}");
-    Response respCategory = await Dio().get("http://localhost:8080/children_category?no=${widget.no}");
+    Response respProduct = await Dio().get("http://localhost:8080/product_list?no=$cateNo");
     // print(response);
     List<dynamic> productData = respProduct.data;
     List<ProductDTO> products = productData.map((json) => ProductDTO.fromJson(json: json)).toList();
 
-    List<dynamic> categoryData = respCategory.data;
-    List<CategoryDTO> categories = categoryData.map((json) => CategoryDTO.fromJson(json: json)).toList();
-
     setState(() {
-        productList = products;
+      productList = products;
     });
 
-    setState(() {
-      categoryList = categories;
-    });
-    // print(categoryList);
-    // print(productList);
+    if(widget.no != 0) {
+      Response respCategory = await Dio().get("http://localhost:8080/children_category?no=$cateNo");
+      List<dynamic> categoryData = respCategory.data;
+      List<CategoryDTO> categories = categoryData.map((json) => CategoryDTO.fromJson(json: json)).toList();
+
+      setState(() {
+        categoryList = categories ?? [];
+      });
+    }
+
+  }
+
+  Widget dropdown() {
+    if(categoryList.isEmpty) {
+      return const SizedBox();
+    } else {
+      return DropdownButton(
+          value: selectedCategory,
+          hint: Text("$categoryName"),
+          items: categoryList.map((category) {
+            return DropdownMenuItem(
+                value: category.no.toString(),
+                child: Text("${category.name}")
+            );
+          }).toList(),
+          onChanged: (value) {
+            cateNo = int.parse(value!);
+            setState(() {
+              get_product_list();
+              categoryName = categoryList.singleWhere((element) => element.no == int.parse(value)).name!;
+              // categoryList.forEach((element) {
+              //   print(element.no);
+              // });
+              // print("value" + value);
+              print(categoryName);
+            });
+          }
+      );
+    }
   }
 
   @override
@@ -70,19 +102,7 @@ class _ItemListPageState extends State<ItemListPage> {
       ),
       body: Column(
         children: [
-          DropdownButton(
-            value: selectedCategory,
-            hint: Text("카테고리 선택"),
-            items: categoryList.map((category) {
-              return DropdownMenuItem(
-                value: category.no.toString(),
-                child: Text("${category.name}")
-              );
-            }).toList(),
-            onChanged: (value) {
-
-            }
-          ),
+          dropdown(),
           Expanded(
             child:GridView.builder(
                 itemCount: productList.length,

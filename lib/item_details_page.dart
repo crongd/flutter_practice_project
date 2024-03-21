@@ -28,9 +28,11 @@ class ItemDetailsPage extends StatefulWidget {
 
 class _ItemDetailsPage extends State<ItemDetailsPage> {
 
-  late ProductDTO productDTO;
+  ProductDTO? productDTO;
   int no = 0;
   List<Widget> images = [];
+  String? selectedOptionNo;
+  String dropTitle = "옵션 선택";
 
   @override
   void initState() {
@@ -61,6 +63,8 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
     );
   }
 
+  
+  // 1개의 상품정보
   void product_get() async {
     // print(no);
     Response response = await Dio().get('http://localhost:8080/product?no=$no');
@@ -69,16 +73,49 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
     ProductDTO resultData = ProductDTO.fromJson(json: responseData);
     // print(resultData);
 
+    productDTO = resultData;
+
 
     resultData.images?.forEach((img) {
       // print(img);
       setState(() {
+        productDTO?.options ??= [];
         images.add(image(img));
       });
     });
     // print(images);
 
   }
+
+  Widget dropdown() {
+    if(productDTO?.options?.length == 0) {
+      return Container();
+    } else {
+      return DropdownButton(
+          value: selectedOptionNo,
+          hint: Text("$dropTitle"),
+          items: productDTO?.options!.map((option) {
+            return DropdownMenuItem(
+                value: option.no.toString(),
+                child: Text("${option.name}")
+            );
+          }).toList(),
+          onChanged: (value) {
+            setState(() {
+              dropTitle = productDTO!.options!.singleWhere((element) => element.no == int.parse(value!)).name!;
+              print(dropTitle);
+            });
+          }
+      );
+    }
+  }
+
+  // void cart_product() async {
+  //   await Dio().post("http://localhost:8080/shopCart_product",
+  //     data: data);
+  //
+  //
+  // }
 
 
   @override
@@ -123,13 +160,22 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
             ),
             Container(
               padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Text(
-                "${numberFormat.format(widget.price)}원",
-                textScaleFactor: 1.3,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  dropdown(),
+                  SizedBox(
+                    width: 50,
+                  ),
+                  Text(
+                    "${numberFormat.format(widget.price)}원",
+                    textScaleFactor: 1.3,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              )
             ),
             Container(
               padding: const EdgeInsets.symmetric(vertical: 20),
@@ -145,7 +191,6 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
         child: FilledButton(
           onPressed: () {
             // 추후 장바구니 담는 로직 추가 예정
-            
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
               return ItemBasketPage();
             }));

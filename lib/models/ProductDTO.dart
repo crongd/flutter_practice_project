@@ -1,8 +1,11 @@
+import 'package:flutter_practice_project/models/OptionDTO.dart';
+
 class ProductDTO {
   int? no;
   String? title;
   String? mainImg;
   List<String>? images;
+  List<OptionDTO>? options;
   int? price;
   int? amount;
 
@@ -11,6 +14,7 @@ class ProductDTO {
     this.title,
     this.mainImg,
     this.images,
+    this.options,
     this.price,
     this.amount
   });
@@ -20,6 +24,9 @@ class ProductDTO {
     title = json['title'];
     mainImg = json['mainImg'];
     images = List<String>.from(json['images'] ?? []);
+    if(json['options'] != null) {
+      options = (json['options'] as List).map((json) => OptionDTO.fromJson(json: json)).toList();
+    }
     price = json['price'];
     amount = json['amount'];
   }
@@ -29,6 +36,10 @@ class ProductDTO {
     data['no'] = no;
     data['title'] = title;
     data['mainImg'] = mainImg;
+    data['images'] = images;
+    if (options != null) {
+      data['options'] = options!.map((option) => option.toJson()).toList();
+    }
     data['price'] = price;
     data['amount'] = amount;
     return data;
@@ -41,6 +52,7 @@ class ProductDTO {
         " title: $title,"
         " mainImg: $mainImg,"
         " images: $images,"
+        " options: $options"
         " price: $price,"
         " amount: $amount}";
   }
