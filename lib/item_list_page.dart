@@ -3,7 +3,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_practice_project/item_details_page.dart';
 import 'package:flutter_practice_project/models/ProductDTO.dart';
 import 'package:flutter_practice_project/public/nav.dart';
-import 'package:intl/intl.dart';
+import '../models/CategoryDTO.dart';
+
 import 'package:dio/dio.dart';
 
 import 'public/appbar.dart';
@@ -23,26 +24,34 @@ class ItemListPage extends StatefulWidget {
 class _ItemListPageState extends State<ItemListPage> {
 
   List<ProductDTO> productList = [];
+  List<CategoryDTO> categoryList = [];
+  String? selectedCategory;
+
 
   @override
   void initState() {
     super.initState();
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //   test();
-    // });
     get_product_list();
   }
 
   void get_product_list() async {
-    Response response = await Dio().get("http://localhost:8080/product_list?no=${widget.no}");
+    Response respProduct = await Dio().get("http://localhost:8080/product_list?no=${widget.no}");
+    Response respCategory = await Dio().get("http://localhost:8080/children_category?no=${widget.no}");
     // print(response);
-    List<dynamic> responseData = response.data;
-    List<ProductDTO> products = responseData.map((json) => ProductDTO.fromJson(json: json)).toList();
+    List<dynamic> productData = respProduct.data;
+    List<ProductDTO> products = productData.map((json) => ProductDTO.fromJson(json: json)).toList();
+
+    List<dynamic> categoryData = respCategory.data;
+    List<CategoryDTO> categories = categoryData.map((json) => CategoryDTO.fromJson(json: json)).toList();
 
     setState(() {
         productList = products;
     });
 
+    setState(() {
+      categoryList = categories;
+    });
+    // print(categoryList);
     // print(productList);
   }
 
@@ -59,21 +68,53 @@ class _ItemListPageState extends State<ItemListPage> {
         ),
         actions: [IconButton(onPressed: (){}, icon: Icon(Icons.login))],
       ),
-      body: GridView.builder(
+      body: Column(
+        children: [
+          DropdownButton(
+            value: selectedCategory,
+            hint: Text("카테고리 선택"),
+            items: categoryList.map((category) {
+              return DropdownMenuItem(
+                value: category.no.toString(),
+                child: Text("${category.name}")
+              );
+            }).toList(),
+            onChanged: (value) {
 
-        itemCount: productList.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          childAspectRatio: 0.9,
-          crossAxisCount: 2),
-        itemBuilder: (context, index) {
-          return productContainer(
-            no: productList[index].no ?? 0,
-            title: productList[index].title ?? "",
-            mainImg: productList[index].mainImg ?? "",
-            price: productList[index].price ?? 0,
-          );
-        },
-      ),
+            }
+          ),
+          Expanded(
+            child:GridView.builder(
+                itemCount: productList.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    childAspectRatio: 0.9,
+                    crossAxisCount: 2),
+                itemBuilder: (context, index) {
+                  return productContainer(
+                    no: productList[index].no ?? 0,
+                    title: productList[index].title ?? "",
+                    mainImg: productList[index].mainImg ?? "",
+                    price: productList[index].price ?? 0,
+                  );
+                },
+              ),
+          )
+        ],
+      )
+      // GridView.builder(
+      //   itemCount: productList.length,
+      //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      //     childAspectRatio: 0.9,
+      //     crossAxisCount: 2),
+      //   itemBuilder: (context, index) {
+      //     return productContainer(
+      //       no: productList[index].no ?? 0,
+      //       title: productList[index].title ?? "",
+      //       mainImg: productList[index].mainImg ?? "",
+      //       price: productList[index].price ?? 0,
+      //     );
+      //   },
+      // ),
     );
   }
 
