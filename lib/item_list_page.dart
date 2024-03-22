@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_practice_project/item_details_page.dart';
 import 'package:flutter_practice_project/models/ProductDTO.dart';
+import 'package:flutter_practice_project/public/alert.dart';
+import 'package:flutter_practice_project/public/loginCheck.dart';
 import 'package:flutter_practice_project/public/nav.dart';
+import 'package:flutter_practice_project/user_login_page.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../models/CategoryDTO.dart';
 
 import 'package:dio/dio.dart';
 
-import 'public/appbar.dart';
 import 'constants.dart';
 
 class ItemListPage extends StatefulWidget {
@@ -34,6 +37,7 @@ class _ItemListPageState extends State<ItemListPage> {
     super.initState();
     cateNo = widget.no;
     get_product_list();
+    loginStatus();
   }
 
   void get_product_list() async {
@@ -87,6 +91,36 @@ class _ItemListPageState extends State<ItemListPage> {
     }
   }
 
+
+  List<Widget> loginIcon = [];
+
+  void loginStatus() async {
+    loginIcon = [];
+    print("loginStatus");
+    print(await loginCheck());
+    if(await loginCheck()) {
+      setState(() {
+        loginIcon.add(TextButton(onPressed: (){
+          final storage = new FlutterSecureStorage();
+          storage.delete(key: 'login');
+        }, child: Text('로그아웃'),));
+      });
+    } else {
+      setState(() {
+        loginIcon.add(TextButton(onPressed: (){
+          alert(context, "로그인 화면으로");
+          setState(() {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserLoginPage()));
+          });
+        }, child: Text('로그인')));
+      });
+    }
+  }
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,7 +132,7 @@ class _ItemListPageState extends State<ItemListPage> {
         },
           icon: Icon(Icons.menu),
         ),
-        actions: [IconButton(onPressed: (){}, icon: Icon(Icons.login))],
+        actions: loginIcon,
       ),
       body: Column(
         children: [

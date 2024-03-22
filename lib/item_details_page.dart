@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_practice_project/public/alert.dart';
 import 'package:flutter_practice_project/public/appbar.dart';
 import 'package:flutter_practice_project/models/ProductDTO.dart';
+import 'package:flutter_practice_project/public/loginCheck.dart';
+import 'package:flutter_practice_project/user_login_page.dart';
 import 'package:intl/intl.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_practice_project/item_basket_page.dart';
@@ -29,7 +32,7 @@ class ItemDetailsPage extends StatefulWidget {
 class _ItemDetailsPage extends State<ItemDetailsPage> {
 
   ProductDTO? productDTO;
-  int no = 0;
+  int? no;
   List<Widget> images = [];
   String? selectedOptionNo;
   String dropTitle = "옵션 선택";
@@ -39,7 +42,6 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
     super.initState();
     no = widget.no;
     product_get();
-
   }
 
   Widget image(imageUrl) {
@@ -189,11 +191,18 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(20),
         child: FilledButton(
-          onPressed: () {
+          onPressed: () async {
             // 추후 장바구니 담는 로직 추가 예정
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return ItemBasketPage();
-            }));
+            if(await loginCheck()) {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                return ItemBasketPage();
+              }));
+            } else {
+              // alert(context, "로그인이 필요한 시스템임");
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => UserLoginPage())
+              );
+            }
           },
           child: const Text("장바구니 담기"),
         ),
