@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_practice_project/models/ProductDTO.dart';
+import 'package:flutter_practice_project/public/alert.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_practice_project/public/appbar.dart';
@@ -25,19 +27,24 @@ class _ItemBasketPage extends State<ItemBasketPage> {
   List<ProductDTO> basketList = [];
   int totalPrice = 0;
 
+  final storage = const FlutterSecureStorage();
+
 
   void GET_basketList() async {
-    Response response = await Dio().get("http://localhost:8080/basket_product");
+    Response response = await Dio().get("http://localhost:8080/basket_product/${await storage.read(key: 'login')}");
     List<dynamic> responseData = response.data;
     List<ProductDTO> products = responseData.map((json) => ProductDTO.fromJson(json: json)).toList();
 
-    print(products);
     setState(() {
       basketList = products;
       for (int i = 0; i < basketList.length; i++) {
         totalPrice += basketList[i].price! * basketList[i].amount!;
       }
     });
+
+    // if(basketList.isEmpty) {
+    //   basketList.add()
+    // }
 
   }
 
@@ -109,10 +116,6 @@ class _ItemBasketPage extends State<ItemBasketPage> {
             width: 15,
           ),
           Flexible(
-            // flex: 1,
-            // padding: const EdgeInsets.symmetric(
-            //     horizontal: 15,
-            //     vertical: 8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -130,16 +133,87 @@ class _ItemBasketPage extends State<ItemBasketPage> {
                   children: [
                     const Text('수량'),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if(amount > 1) {
+                          var data = {
+                            "no" : no,
+                            "amount" : amount - 1
+                          };
+
+                          Dio().patch('http://localhost:8080/shpCart_amount_update',
+                            data: data
+                          );
+
+                          setState(() {
+                            basketList[basketList.indexWhere((element) => element.no == no)].amount = amount - 1;
+                            totalPrice = 0;
+                            for (int i = 0; i < basketList.length; i++) {
+                              totalPrice += basketList[i].price! * basketList[i].amount!;
+                            }
+                          });
+
+                        } else {
+                          alert(context, "수량은 0이 될 수 없다");
+                        }
+
+                      },
                       icon: const Icon(Icons.remove),
                     ),
                     Text("$amount"),
                     IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          var data = {
+                            "no" : no,
+                            "amount" : amount + 1
+                          };
+
+                          Dio().patch('http://localhost:8080/shpCart_amount_update',
+                              data: data
+                          );
+
+                          setState(() {
+                            basketList[basketList.indexWhere((element) => element.no == no)].amount = amount + 1;
+                            totalPrice = 0;
+                            for (int i = 0; i < basketList.length; i++) {
+                              totalPrice += basketList[i].price! * basketList[i].amount!;
+                            }
+                          });
+
+
+                        },
                         icon: const Icon(Icons.add)
                     ),
                     IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext ctx) {
+                                return AlertDialog(
+                                  content: Text("진짜 삭제할래?"),
+                                  actions: [
+                                    TextButton(onPressed: () {
+                                      var data = {
+                                        "no" : no
+                                      };
+
+                                      Dio().delete('http://localhost:8080/shopCart_delete',
+                                          data: data
+                                      );
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(builder: (context) => ItemBasketPage())
+                                      );
+                                    }, child: Text("ㅇㅋ")),
+                                    TextButton(onPressed: () {
+                                      Navigator.of(context).pop();
+                                    }, child: Text("ㄴㄴ")),
+                                  ],
+                                );
+                              });
+
+
+                        },
                         icon: Icon(Icons.delete)
                     ),
                   ],

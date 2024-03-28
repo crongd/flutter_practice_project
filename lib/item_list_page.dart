@@ -103,14 +103,17 @@ class _ItemListPageState extends State<ItemListPage> {
         loginIcon.add(TextButton(onPressed: (){
           final storage = new FlutterSecureStorage();
           storage.delete(key: 'login');
+          Navigator.of(context).pop();
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => ItemListPage(no: widget.no))
+          );
         }, child: Text('로그아웃'),));
       });
     } else {
       setState(() {
         loginIcon.add(TextButton(onPressed: (){
-          alert(context, "로그인 화면으로");
           setState(() {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserLoginPage()));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserLoginPage(no: widget.no, page: "list",)));
           });
         }, child: Text('로그인')));
       });
@@ -181,7 +184,7 @@ class _ItemListPageState extends State<ItemListPage> {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          return ItemDetailsPage(no: no, title: title, mainImg: mainImg, price: price);
+          return ItemDetailsPage(no: no);
         }));
       },
       child: Column(

@@ -1,3 +1,4 @@
+import 'package:flutter_practice_project/item_basket_page.dart';
 import 'package:flutter_practice_project/item_list_page.dart';
 
 import 'package:flutter/material.dart';
@@ -51,6 +52,19 @@ class _ScreenState extends State<Screen> {
           );
         },
       ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(20),
+        child: FilledButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => ItemBasketPage())
+            );
+          },
+          child: const Text("장바구니"),
+        ),
+        
+      ),
     );
   }
 
@@ -82,6 +96,7 @@ class _ScreenState extends State<Screen> {
           ),
         ],
       ),
+
     );
   }
 

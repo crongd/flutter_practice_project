@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_practice_project/item_details_page.dart';
 import 'package:flutter_practice_project/item_list_page.dart';
 import 'package:flutter_practice_project/public/alert.dart';
 import 'package:flutter_practice_project/user_join_page.dart';
@@ -12,7 +13,13 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 
 class UserLoginPage extends StatefulWidget {
-  UserLoginPage({super.key});
+  int no;
+  String page;
+
+  UserLoginPage({super.key,
+    required this.no,
+    required this.page
+  });
 
   @override
   State<UserLoginPage> createState() => _UserLoginPage();
@@ -25,7 +32,7 @@ class _UserLoginPage extends State<UserLoginPage> {
   final idController = TextEditingController();
   final pwController = TextEditingController();
 
-  final storage = new FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
 
   void login() async {
     String id = idController.text;
@@ -47,10 +54,18 @@ class _UserLoginPage extends State<UserLoginPage> {
       await storage.write(key: "login", value: id);
       Navigator.of(context).pop();
 
+      if(widget.page == "list") {
+        // Navigator.of(context).pop();
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => ItemListPage(no: widget.no))
+        );
+      } else {
+        // Navigator.of(context).pop();
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => ItemDetailsPage(no: widget.no)));
+      }
 
-      // Navigator.of(context).push(
-      //   MaterialPageRoute(builder: (context) => ItemListPage(no: 0))
-      // );
+
+
     } else {
       alert(context, "입력한 정보가 일치하지 않음");
     }
