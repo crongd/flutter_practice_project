@@ -3,7 +3,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_practice_project/models/ProductDTO.dart';
 import 'package:flutter_practice_project/public/alert.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:intl/intl.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_practice_project/public/appbar.dart';
 import 'package:flutter_practice_project/item_payment_page.dart';

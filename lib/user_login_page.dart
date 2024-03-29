@@ -5,7 +5,6 @@ import 'package:flutter_practice_project/item_details_page.dart';
 import 'package:flutter_practice_project/item_list_page.dart';
 import 'package:flutter_practice_project/public/alert.dart';
 import 'package:flutter_practice_project/user_join_page.dart';
-import 'package:flutter_practice_project/item_list_page.dart';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

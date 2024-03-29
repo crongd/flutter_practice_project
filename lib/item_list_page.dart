@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_practice_project/item_details_page.dart';
 import 'package:flutter_practice_project/models/ProductDTO.dart';
-import 'package:flutter_practice_project/public/alert.dart';
 import 'package:flutter_practice_project/public/loginCheck.dart';
 import 'package:flutter_practice_project/public/nav.dart';
 import 'package:flutter_practice_project/public/search.dart';
