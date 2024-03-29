@@ -43,7 +43,7 @@ class _UserLoginPage extends State<UserLoginPage> {
       "pw" : pw
     };
 
-    Response response = await Dio().post("http://localhost:8080/user_login",
+    Response response = await Dio().post("http://192.168.2.3:8080/user_login",
         options: Options(contentType: Headers.jsonContentType),
         data: jsonEncode(formData));
     // print(response.data);
@@ -82,9 +82,10 @@ class _UserLoginPage extends State<UserLoginPage> {
         child: Padding(
             padding: EdgeInsets.all(20),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              // mainAxisAlignment: MainAxisAlignment.center,
               // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Image.asset('assets/images/logo.jpg', height: 300, width: 300,),
                 TextField(
                   controller: idController,
                   decoration: InputDecoration(
@@ -92,6 +93,7 @@ class _UserLoginPage extends State<UserLoginPage> {
                   ),
                 ),
                 TextField(
+                  obscureText: true,
                   controller: pwController,
                   decoration: InputDecoration(
                     labelText: '비밀번호',
@@ -102,12 +104,31 @@ class _UserLoginPage extends State<UserLoginPage> {
                 ),
                 Row(
                   children: [
-                    Expanded(child: TextButton(onPressed: login, child: Text("로그인"))),
-                    Expanded(child: TextButton(onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => UserJoinPage())
-                      );
-                    }, child: Text("회원가입"))),
+                    Expanded(child: TextButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.blue),
+                      ),
+                      onPressed: login, 
+                      child: Text(
+                        "로그인",
+                        style: TextStyle(color: Colors.white),
+                      )
+                    )
+                    ),
+                    SizedBox(width: 10,),
+                    Expanded(child: TextButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.blue),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => UserJoinPage())
+                        );
+                    }, child: Text(
+                      "회원가입",
+                      style: TextStyle(color: Colors.white),)
+                    )
+                    ),
                   ],
                 )
               ],

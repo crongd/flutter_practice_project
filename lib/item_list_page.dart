@@ -5,6 +5,7 @@ import 'package:flutter_practice_project/models/ProductDTO.dart';
 import 'package:flutter_practice_project/public/alert.dart';
 import 'package:flutter_practice_project/public/loginCheck.dart';
 import 'package:flutter_practice_project/public/nav.dart';
+import 'package:flutter_practice_project/public/search.dart';
 import 'package:flutter_practice_project/user_login_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../models/CategoryDTO.dart';
@@ -15,9 +16,11 @@ import 'constants.dart';
 
 class ItemListPage extends StatefulWidget {
   int no;
+  String? search;
 
   ItemListPage({super.key,
-    required this.no
+    required this.no,
+    this.search
   });
 
   @override
@@ -38,20 +41,34 @@ class _ItemListPageState extends State<ItemListPage> {
     cateNo = widget.no;
     get_product_list();
     loginStatus();
+    print(widget.search);
   }
 
   void get_product_list() async {
-    Response respProduct = await Dio().get("http://localhost:8080/product_list?no=$cateNo");
-    // print(response);
-    List<dynamic> productData = respProduct.data;
-    List<ProductDTO> products = productData.map((json) => ProductDTO.fromJson(json: json)).toList();
+    if(widget.search == null || widget.search == "") {
+      Response respProduct = await Dio().get("http://192.168.2.3:8080/product_list?no=$cateNo");
+      // print(response);
+      List<dynamic> productData = respProduct.data;
+      List<ProductDTO> products = productData.map((json) => ProductDTO.fromJson(json: json)).toList();
 
-    setState(() {
-      productList = products;
-    });
+      setState(() {
+        productList = products;
+      });
+    } else {
+      print(cateNo);
+      print(widget.search);
+      Response respProduct = await Dio().get("http://192.168.2.3:8080/product_search_list?no=$cateNo&search=${widget.search}");
+      // print(response);
+      List<dynamic> productData = respProduct.data;
+      List<ProductDTO> products = productData.map((json) => ProductDTO.fromJson(json: json)).toList();
+
+      setState(() {
+        productList = products;
+      });
+    }
 
     if(widget.no != 0) {
-      Response respCategory = await Dio().get("http://localhost:8080/children_category?no=$cateNo");
+      Response respCategory = await Dio().get("http://192.168.2.3:8080/children_category?no=$cateNo");
       List<dynamic> categoryData = respCategory.data;
       List<CategoryDTO> categories = categoryData.map((json) => CategoryDTO.fromJson(json: json)).toList();
 
@@ -60,11 +77,12 @@ class _ItemListPageState extends State<ItemListPage> {
       });
     }
 
+    widget.search = "";
   }
 
   Widget dropdown() {
     if(categoryList.isEmpty) {
-      return const SizedBox();
+      return const SizedBox(width: 0, height: 0,);
     } else {
       return DropdownButton(
           value: selectedCategory,
@@ -139,7 +157,26 @@ class _ItemListPageState extends State<ItemListPage> {
       ),
       body: Column(
         children: [
-          dropdown(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Center(child: Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: dropdown(),
+                ),
+                )
+
+              ),
+              Padding(
+                padding: const EdgeInsets.all(5),
+                child: IconButton(onPressed: () {
+                  search_bar(context, widget.no);
+                }, icon: Icon(Icons.search)),
+              ),
+
+            ],
+          ),
           Expanded(
             child:GridView.builder(
                 itemCount: productList.length,

@@ -31,7 +31,7 @@ class _ItemBasketPage extends State<ItemBasketPage> {
 
 
   void GET_basketList() async {
-    Response response = await Dio().get("http://localhost:8080/basket_product/${await storage.read(key: 'login')}");
+    Response response = await Dio().get("http://192.168.2.3:8080/basket_product/${await storage.read(key: 'login')}");
     List<dynamic> responseData = response.data;
     List<ProductDTO> products = responseData.map((json) => ProductDTO.fromJson(json: json)).toList();
 
@@ -69,6 +69,7 @@ class _ItemBasketPage extends State<ItemBasketPage> {
               no: basketList[index].no ?? 0,
               title: basketList[index].title ?? "",
               mainImg: basketList[index].mainImg ?? "",
+              option: basketList[index].options?[0].name ?? "",
               price: basketList[index].price ?? 0,
               amount: basketList[index].amount ?? 0
           );
@@ -83,10 +84,22 @@ class _ItemBasketPage extends State<ItemBasketPage> {
     );
   }
 
+  Widget option_widget(option) {
+    if(option == "") {
+      return SizedBox(
+        height: 0,
+        width: 0,
+      );
+    } else {
+      return Text('옵션: ${option}');
+    }
+  }
+
   Widget basketContainer({
     required int no,
     required String title,
     required String mainImg,
+    required String option,
     required int price,
     required int amount
 }) {
@@ -129,6 +142,7 @@ class _ItemBasketPage extends State<ItemBasketPage> {
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text("${numberFormat.format(price)}원"),
+                option_widget(option),
                 Row(
                   children: [
                     const Text('수량'),
@@ -140,7 +154,7 @@ class _ItemBasketPage extends State<ItemBasketPage> {
                             "amount" : amount - 1
                           };
 
-                          Dio().patch('http://localhost:8080/shpCart_amount_update',
+                          Dio().patch('http://192.168.2.3:8080/shpCart_amount_update',
                             data: data
                           );
 
@@ -167,7 +181,7 @@ class _ItemBasketPage extends State<ItemBasketPage> {
                             "amount" : amount + 1
                           };
 
-                          Dio().patch('http://localhost:8080/shpCart_amount_update',
+                          Dio().patch('http://192.168.2.3:8080/shpCart_amount_update',
                               data: data
                           );
 
@@ -197,9 +211,10 @@ class _ItemBasketPage extends State<ItemBasketPage> {
                                         "no" : no
                                       };
 
-                                      Dio().delete('http://localhost:8080/shopCart_delete',
+                                      Dio().delete('http://192.168.2.3:8080/shopCart_delete',
                                           data: data
                                       );
+                                      Navigator.of(context).pop();
                                       Navigator.of(context).pop();
                                       Navigator.of(context).push(
                                           MaterialPageRoute(builder: (context) => ItemBasketPage())

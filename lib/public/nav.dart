@@ -3,8 +3,10 @@ import 'package:flutter_practice_project/item_list_page.dart';
 
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_practice_project/public/loginCheck.dart';
 
 import '../models/CategoryDTO.dart';
+import '../user_login_page.dart';
 
 
 class Screen extends StatefulWidget {
@@ -26,7 +28,7 @@ class _ScreenState extends State<Screen> {
   }
 
   void GET_parent_category() async {
-    Response response = await Dio().get('http://localhost:8080/parent_category');
+    Response response = await Dio().get('http://192.168.2.3:8080/parent_category');
     List<dynamic> responseData = response.data;
     setState(() {
       categoryList = responseData.map((json) => CategoryDTO.fromJson(json: json)).toList();
@@ -55,11 +57,18 @@ class _ScreenState extends State<Screen> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(20),
         child: FilledButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => ItemBasketPage())
-            );
+          onPressed: () async {
+            if(await loginCheck()) {
+              Navigator.of(context).pop();
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => ItemBasketPage())
+              );
+            } else {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => UserLoginPage(no: 0, page: "list",))
+              );
+            }
+
           },
           child: const Text("장바구니"),
         ),
