@@ -90,7 +90,7 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
   // }
 
   Future<ProductDTO> product_get() async {
-    Response response = await Dio().get('http://192.168.2.3:8080/product?no=$no');
+    Response response = await Dio().get('http://192.168.219.106:8080/product?no=$no');
     dynamic responseData = response.data;
     ProductDTO resultData = ProductDTO.fromJson(json: responseData);
     return resultData; // ProductDTO 반환
@@ -225,7 +225,7 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
               };
 
               print(formData);
-              await Dio().post('http://192.168.2.3:8080/shopCart_product',
+              await Dio().post('http://192.168.219.106:8080/shopCart_product',
                   options: Options(contentType: Headers.jsonContentType),
                   data: json.encode(formData)
               );

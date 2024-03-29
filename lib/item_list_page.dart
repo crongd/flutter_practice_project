@@ -46,7 +46,7 @@ class _ItemListPageState extends State<ItemListPage> {
 
   void get_product_list() async {
     if(widget.search == null || widget.search == "") {
-      Response respProduct = await Dio().get("http://192.168.2.3:8080/product_list?no=$cateNo");
+      Response respProduct = await Dio().get("http://192.168.219.106:8080/product_list?no=$cateNo");
       // print(response);
       List<dynamic> productData = respProduct.data;
       List<ProductDTO> products = productData.map((json) => ProductDTO.fromJson(json: json)).toList();
@@ -57,7 +57,7 @@ class _ItemListPageState extends State<ItemListPage> {
     } else {
       print(cateNo);
       print(widget.search);
-      Response respProduct = await Dio().get("http://192.168.2.3:8080/product_search_list?no=$cateNo&search=${widget.search}");
+      Response respProduct = await Dio().get("http://192.168.219.106:8080/product_search_list?no=$cateNo&search=${widget.search}");
       // print(response);
       List<dynamic> productData = respProduct.data;
       List<ProductDTO> products = productData.map((json) => ProductDTO.fromJson(json: json)).toList();
@@ -68,7 +68,7 @@ class _ItemListPageState extends State<ItemListPage> {
     }
 
     if(widget.no != 0) {
-      Response respCategory = await Dio().get("http://192.168.2.3:8080/children_category?no=$cateNo");
+      Response respCategory = await Dio().get("http://192.168.219.106:8080/children_category?no=$cateNo");
       List<dynamic> categoryData = respCategory.data;
       List<CategoryDTO> categories = categoryData.map((json) => CategoryDTO.fromJson(json: json)).toList();
 

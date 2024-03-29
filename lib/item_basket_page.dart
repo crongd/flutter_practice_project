@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_practice_project/public/appbar.dart';
+import 'package:flutter_practice_project/item_payment_page.dart';
 
 import 'constants.dart';
 
@@ -31,7 +32,7 @@ class _ItemBasketPage extends State<ItemBasketPage> {
 
 
   void GET_basketList() async {
-    Response response = await Dio().get("http://192.168.2.3:8080/basket_product/${await storage.read(key: 'login')}");
+    Response response = await Dio().get("http://192.168.219.106:8080/basket_product/${await storage.read(key: 'login')}");
     List<dynamic> responseData = response.data;
     List<ProductDTO> products = responseData.map((json) => ProductDTO.fromJson(json: json)).toList();
 
@@ -41,7 +42,7 @@ class _ItemBasketPage extends State<ItemBasketPage> {
         totalPrice += basketList[i].price! * basketList[i].amount!;
       }
     });
-
+    print(basketList);
     // if(basketList.isEmpty) {
     //   basketList.add()
     // }
@@ -77,7 +78,11 @@ class _ItemBasketPage extends State<ItemBasketPage> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(20),
         child: FilledButton(
-          onPressed: (){},
+          onPressed: (){
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => ItemPaymentPage())
+            );
+          },
           child: Text("총 ${numberFormat.format(totalPrice)}원 결제하기"),
         ),
       ),
@@ -154,7 +159,7 @@ class _ItemBasketPage extends State<ItemBasketPage> {
                             "amount" : amount - 1
                           };
 
-                          Dio().patch('http://192.168.2.3:8080/shpCart_amount_update',
+                          Dio().patch('http://192.168.219.106:8080/shpCart_amount_update',
                             data: data
                           );
 
@@ -176,12 +181,13 @@ class _ItemBasketPage extends State<ItemBasketPage> {
                     Text("$amount"),
                     IconButton(
                         onPressed: () {
+                          print("+ 들어옴");
                           var data = {
                             "no" : no,
                             "amount" : amount + 1
                           };
 
-                          Dio().patch('http://192.168.2.3:8080/shpCart_amount_update',
+                          Dio().patch('http://192.168.219.106:8080/shpCart_amount_update',
                               data: data
                           );
 
@@ -211,7 +217,7 @@ class _ItemBasketPage extends State<ItemBasketPage> {
                                         "no" : no
                                       };
 
-                                      Dio().delete('http://192.168.2.3:8080/shopCart_delete',
+                                      Dio().delete('http://192.168.219.106:8080/shopCart_delete',
                                           data: data
                                       );
                                       Navigator.of(context).pop();

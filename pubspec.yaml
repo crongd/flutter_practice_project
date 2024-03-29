@@ -33,6 +33,7 @@ dependencies:
 
   cached_network_image: ^3.2.3
   intl: ^0.17.0
+  kpostal:
   dio:
   flutter_secure_storage : ^5.0.2
 
