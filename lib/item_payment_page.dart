@@ -227,79 +227,79 @@ class _ItemPaymentPage extends State<ItemPaymentPage> {
     );
   }
 
-  Widget option_widget(option) {
-    if(option == "") {
-      return SizedBox(
-        height: 0,
-        width: 0,
-      );
-    } else {
-      return Text('옵션: ${option}');
-    }
-  }
+  // Widget option_widget(option) {
+  //   if(option == "") {
+  //     return SizedBox(
+  //       height: 0,
+  //       width: 0,
+  //     );
+  //   } else {
+  //     return Text('옵션: ${option}');
+  //   }
+  // }
 
-  Widget paymentContainer({
-    required int no,
-    required String title,
-    required String mainImg,
-    required String option,
-    required int price,
-    required int amount
-}) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CachedNetworkImage( // 동일한 이미지일 경우 캐시에 저장된 이미지를 가져옴
-            imageUrl: mainImg,
-            width: MediaQuery.of(context).size.width * 0.3,
-            fit: BoxFit.cover,
-            placeholder: (context, url) {
-                return const Center(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                  ),
-                );
-            },
-            errorWidget: (context, url, error){
-                return const Center(
-                  child: Text("오류 발생"),
-                );
-            },
-          ),
-          SizedBox(
-            width: 15,
-          ),
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  "${title} 외 ${basketList.length} 개",
-                  // textScaleFactor: 1.2,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text("${numberFormat.format(price)}원"),
-                option_widget(option),
-                Row(
-                  children: [
-                    const Text('수량'),
-                    Text("$amount"),
-                  ],
-                ),
-                Text("합계: ${numberFormat.format(price * amount)}원"),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+//   Widget paymentContainer({
+//     required int no,
+//     required String title,
+//     required String mainImg,
+//     required String option,
+//     required int price,
+//     required int amount
+// }) {
+//     return Container(
+//       padding: const EdgeInsets.all(8),
+//       child: Row(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           CachedNetworkImage( // 동일한 이미지일 경우 캐시에 저장된 이미지를 가져옴
+//             imageUrl: mainImg,
+//             width: MediaQuery.of(context).size.width * 0.3,
+//             fit: BoxFit.cover,
+//             placeholder: (context, url) {
+//                 return const Center(
+//                   child: CircularProgressIndicator(
+//                     strokeWidth: 2,
+//                   ),
+//                 );
+//             },
+//             errorWidget: (context, url, error){
+//                 return const Center(
+//                   child: Text("오류 발생"),
+//                 );
+//             },
+//           ),
+//           SizedBox(
+//             width: 15,
+//           ),
+//           Flexible(
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               mainAxisSize: MainAxisSize.min,
+//               children: [
+//                 Text(
+//                   "${title} 외 ${basketList.length} 개",
+//                   // textScaleFactor: 1.2,
+//                   style: const TextStyle(
+//                     fontWeight: FontWeight.bold,
+//                   ),
+//                   overflow: TextOverflow.ellipsis,
+//                 ),
+//                 Text("${numberFormat.format(price)}원"),
+//                 option_widget(option),
+//                 Row(
+//                   children: [
+//                     const Text('수량'),
+//                     Text("$amount"),
+//                   ],
+//                 ),
+//                 Text("합계: ${numberFormat.format(price * amount)}원"),
+//               ],
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
 
 
   Widget inputTextField({
