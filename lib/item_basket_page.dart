@@ -79,7 +79,7 @@ class _ItemBasketPage extends State<ItemBasketPage> {
         child: FilledButton(
           onPressed: (){
             Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => ItemPaymentPage())
+              MaterialPageRoute(builder: (context) => ItemPaymentPage(list: basketList))
             );
           },
           child: Text("총 ${numberFormat.format(totalPrice)}원 결제하기"),
@@ -158,7 +158,7 @@ class _ItemBasketPage extends State<ItemBasketPage> {
                             "amount" : amount - 1
                           };
 
-                          Dio().patch('http://192.168.219.106:8080/shpCart_amount_update',
+                          Dio().patch('http://192.168.219.106:8080/shopCart_amount_update',
                             data: data
                           );
 
