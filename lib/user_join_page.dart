@@ -25,7 +25,7 @@ class _UserJoinPage extends State<UserJoinPage> {
     String name = nameController.text;
 
 
-    Dio().post("http://192.168.219.106:8080/user_join",
+    Dio().post("http://192.168.2.3:8080/user_join",
     options: Options(contentType: Headers.jsonContentType),
     data: UserDTO(id: id, pw: pw, name: name)).toString();
 

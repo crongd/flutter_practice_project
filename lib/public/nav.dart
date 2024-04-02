@@ -28,7 +28,7 @@ class _ScreenState extends State<Screen> {
   }
 
   void GET_parent_category() async {
-    Response response = await Dio().get('http://192.168.219.106:8080/parent_category');
+    Response response = await Dio().get('http://192.168.2.3:8080/parent_category');
     List<dynamic> responseData = response.data;
     setState(() {
       categoryList = responseData.map((json) => CategoryDTO.fromJson(json: json)).toList();

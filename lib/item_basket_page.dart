@@ -31,7 +31,7 @@ class _ItemBasketPage extends State<ItemBasketPage> {
 
 
   void GET_basketList() async {
-    Response response = await Dio().get("http://192.168.219.106:8080/basket_product/${await storage.read(key: 'login')}");
+    Response response = await Dio().get("http://192.168.2.3:8080/basket_product/${await storage.read(key: 'login')}");
     List<dynamic> responseData = response.data;
     List<ProductDTO> products = responseData.map((json) => ProductDTO.fromJson(json: json)).toList();
 
@@ -158,7 +158,7 @@ class _ItemBasketPage extends State<ItemBasketPage> {
                             "amount" : amount - 1
                           };
 
-                          Dio().patch('http://192.168.219.106:8080/shopCart_amount_update',
+                          Dio().patch('http://192.168.2.3:8080/shopCart_amount_update',
                             data: data
                           );
 
@@ -186,7 +186,7 @@ class _ItemBasketPage extends State<ItemBasketPage> {
                             "amount" : amount + 1
                           };
 
-                          Dio().patch('http://192.168.219.106:8080/shpCart_amount_update',
+                          Dio().patch('http://192.168.2.3:8080/shpCart_amount_update',
                               data: data
                           );
 
@@ -216,7 +216,7 @@ class _ItemBasketPage extends State<ItemBasketPage> {
                                         "no" : no
                                       };
 
-                                      Dio().delete('http://192.168.219.106:8080/shopCart_delete',
+                                      Dio().delete('http://192.168.2.3:8080/shopCart_delete',
                                           data: data
                                       );
                                       Navigator.of(context).pop();

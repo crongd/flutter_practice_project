@@ -42,7 +42,7 @@ class _UserLoginPage extends State<UserLoginPage> {
       "pw" : pw
     };
 
-    Response response = await Dio().post("http://192.168.219.106:8080/user_login",
+    Response response = await Dio().post("http://192.168.2.3:8080/user_login",
         options: Options(contentType: Headers.jsonContentType),
         data: jsonEncode(formData));
     // print(response.data);

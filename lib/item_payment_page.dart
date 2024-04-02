@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_practice_project/models/ProductDTO.dart';
+import 'package:flutter_practice_project/payment_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_practice_project/public/appbar.dart';
 import 'package:kpostal/kpostal.dart';
 import 'package:flutter_practice_project/public/basic_dialog.dart';
 import 'package:flutter_practice_project/item_order_result_page.dart';
+import 'package:iamport_flutter/iamport_payment.dart';
 
 import 'constants.dart';
 
@@ -58,7 +61,7 @@ class _ItemPaymentPage extends State<ItemPaymentPage> {
 
 
   void GET_basketList() async {
-    // Response response = await Dio().get("http://192.168.219.106:8080/basket_product/${await storage.read(key: 'login')}");
+    // Response response = await Dio().get("http://192.168.2.3:8080/basket_product/${await storage.read(key: 'login')}");
     // List<dynamic> responseData = response.data;
     // List<ProductDTO> products = responseData.map((json) => ProductDTO.fromJson(json: json)).toList();
     basketList = widget.list;
@@ -159,11 +162,11 @@ class _ItemPaymentPage extends State<ItemPaymentPage> {
                   children: [
                     inputTextField(currentController: buyerNameController, currentHintText: "주문자명"),
                     inputTextField(currentController: buyerEmailController, currentHintText: "주문자 이메일"),
-                    inputTextField(currentController: buyerPhoneController, currentHintText: "주문자 휴대전화"),
+                    inputTextField(currentController: buyerPhoneController, currentHintText: "주문자 휴대전화(숫자만 입력)", numberOnly: true),
                     inputTextField(currentController: receiverNameController, currentHintText: "수령자명"),
-                    inputTextField(currentController: receiverPhoneController, currentHintText: "주문자 휴대전화"),
+                    inputTextField(currentController: receiverPhoneController, currentHintText: "수령자 휴대전화(숫자만 입력)", numberOnly: true),
                     receiverZipTextField(),
-                    inputTextField(currentController: receiverAddress1Controller, currentHintText: "기본 주소"),
+                    inputTextField(currentController: receiverAddress1Controller, currentHintText: "기본 주소", isReadOnly: true),
                     inputTextField(currentController: receiverAddress2Controller, currentHintText: "상세 주소"),
                     paymentMethodDropdownButton(),
                     if (selectedPaymentMethod == "카드 결제")
@@ -214,11 +217,16 @@ class _ItemPaymentPage extends State<ItemPaymentPage> {
                     });
                 return;
               }
+
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) {
-                  return const ItemOrderResultPage();
-                }
-                ));
+                MaterialPageRoute(builder: (context) => Payment())
+              );
+              // Navigator.of(context).push(
+              //   MaterialPageRoute(builder: (context) {
+              //     return const ItemOrderResultPage();
+              //   }
+              //   )
+              // );
             }
           },
           child: Text("총 ${numberFormat.format(totalPrice)}원 결제요청"),
@@ -303,16 +311,22 @@ class _ItemPaymentPage extends State<ItemPaymentPage> {
 
 
   Widget inputTextField({
-      required TextEditingController currentController,
-      required String currentHintText,
-      int? currentMaxLength,
-      bool isObscure = false,
-      bool isReadOnly = false,
-      bool readOnly = true
+    required TextEditingController currentController,
+    required String currentHintText,
+    int? currentMaxLength,
+    bool isObscure = false,
+    bool isReadOnly = false,
+    bool numberOnly = false
   }) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
+        inputFormatters: [
+          if(numberOnly)
+            FilteringTextInputFormatter.digitsOnly,
+            LengthLimitingTextInputFormatter(11),
+        ],
+        readOnly: isReadOnly,
         validator: (value) {
           if (value!.isEmpty) {
             return "내용을 입력해 주세요.";
@@ -350,13 +364,15 @@ class _ItemPaymentPage extends State<ItemPaymentPage> {
           FilledButton(
             onPressed: () {
               //우편번호 초이스
-              Navigator.push(
-                context,
-                MaterialPageRoute(
+              Navigator.push(context, MaterialPageRoute(
                     builder: (context) => KpostalView(
                       callback: (Kpostal result) {
-                        receiverZipController.text = result.postCode;
-                        receiverAddress1Controller.text = result.address;
+                        try {
+                          receiverZipController.text = result.postCode;
+                          receiverAddress1Controller.text = result.address;
+                        } catch (e){
+                          print(e);
+                        }
                       },
                     )
                 )
