@@ -3,7 +3,9 @@ import 'package:flutter_practice_project/item_list_page.dart';
 
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_practice_project/main.dart';
 import 'package:flutter_practice_project/public/loginCheck.dart';
+import 'package:flutter_practice_project/public/my_page.dart';
 
 import '../models/CategoryDTO.dart';
 import '../user_login_page.dart';
@@ -96,7 +98,7 @@ class _ScreenState extends State<Screen> {
                 onPressed: () {
                   Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                    return ItemListPage(no: no,);
+                    return MarketPage(no: no,);
                   }));
                   // pop 하고 실행?
                   // 바로실행하면 스택에 올라가지 않나 뒤로가기 하면 이 화면이 나오고;

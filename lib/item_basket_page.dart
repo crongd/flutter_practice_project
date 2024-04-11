@@ -186,7 +186,7 @@ class _ItemBasketPage extends State<ItemBasketPage> {
                             "amount" : amount + 1
                           };
 
-                          Dio().patch('http://192.168.2.3:8080/shpCart_amount_update',
+                          Dio().patch('http://192.168.2.3:8080/shopCart_amount_update',
                               data: data
                           );
 
