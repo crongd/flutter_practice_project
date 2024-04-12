@@ -3,13 +3,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_practice_project/constants.dart';
-import 'package:flutter_practice_project/item_details_page.dart';
-import 'package:flutter_practice_project/item_list_page.dart';
+import 'package:flutter_practice_project/public/constants.dart';
+import 'package:flutter_practice_project/page/item_details_page.dart';
+import 'package:flutter_practice_project/page/item_list_page.dart';
 
-import 'package:flutter_practice_project/main_page.dart';
+import 'package:flutter_practice_project/page/main_page.dart';
 import 'package:flutter_practice_project/public/my_page.dart';
-import 'package:flutter_practice_project/public/nav.dart';
+import 'package:flutter_practice_project/page/category_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,10 +33,12 @@ class MyApp extends StatelessWidget {
 
 class MarketPage extends StatefulWidget {
   int? no = 0;
+  String? title;
 
   MarketPage({
     super.key,
-    this.no
+    this.no,
+    this.title
   });
 
   @override
@@ -44,7 +46,7 @@ class MarketPage extends StatefulWidget {
 }
 
 class _MarketPageState extends State<MarketPage> {
-  int no = 0;
+  static int no = 0;
   static int cateNo = 0;
   int _selectedIndex = 0;
 
@@ -52,7 +54,7 @@ class _MarketPageState extends State<MarketPage> {
     Screen(),
     MainPage(),
     MyPage(),
-    ItemListPage(no: cateNo)
+    ItemListPage(no: no)
   ];
 
   void _onItemTapped(int index) {
@@ -75,14 +77,14 @@ class _MarketPageState extends State<MarketPage> {
 
 
   Widget bodyWidget(int no) {
-    print(no);
-    if (no == 0) {
+    print(mainStatus);
+    if (mainStatus == 0) {
       return SafeArea(
           child: _widgetOptions.elementAt(_selectedIndex)
       );
     } else {
       return SafeArea(
-          child: ItemListPage(no: no)
+          child: ItemListPage(no: no, title: widget.title,)
       );
     }
   }

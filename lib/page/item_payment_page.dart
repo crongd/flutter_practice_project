@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_practice_project/models/ProductDTO.dart';
-import 'package:flutter_practice_project/port_one_payment_page.dart';
+import 'package:flutter_practice_project/page/port_one_payment_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_practice_project/public/appbar.dart';
 import 'package:kpostal/kpostal.dart';
 import 'package:flutter_practice_project/public/basic_dialog.dart';
-import 'package:flutter_practice_project/item_order_result_page.dart';
+import 'package:flutter_practice_project/page/item_order_result_page.dart';
 import 'package:iamport_flutter/iamport_payment.dart';
 
-import 'constants.dart';
+import '../public/constants.dart';
 
 class ItemPaymentPage extends StatefulWidget {
   List<ProductDTO> list;
@@ -88,7 +88,7 @@ class _ItemPaymentPage extends State<ItemPaymentPage> {
   Widget build(BuildContext context) {
     String title = "결제 페이지";
     return Scaffold(
-      appBar: pub_app(title),
+      appBar: pub_app(title, context),
       body: SingleChildScrollView(
         child: Column(
           children: [

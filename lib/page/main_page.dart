@@ -3,12 +3,13 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_practice_project/page/item_basket_page.dart';
 import 'package:flutter_practice_project/public/my_page.dart';
-import 'package:flutter_practice_project/public/nav.dart';
+import 'package:flutter_practice_project/page/category_page.dart';
 
-import 'constants.dart';
+import '../public/constants.dart';
 import 'item_details_page.dart';
-import 'models/ProductDTO.dart';
+import '../models/ProductDTO.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -41,13 +42,13 @@ class _MainPageState extends State<MainPage> {
 
   void main_products() async {
     // 가장 최근 상품 조회 (limit 20)
-    Response recentProduct = await Dio().get("http://192.168.2.3:8080/recent_products");
+    Response recentProduct = await Dio().get("http://$connectAddr:8080/recent_products");
     // print(respProduct);
     List<dynamic> productData = recentProduct.data;
     List<ProductDTO> products = productData.map((json) => ProductDTO.fromJson(json: json)).toList();
 
     // 가장 많이 팔린 상품 조회 (limit 20)
-    Response bestProduct = await Dio().get("http://192.168.2.3:8080/best_selling_products");
+    Response bestProduct = await Dio().get("http://$connectAddr:8080/best_selling_products");
     List<dynamic> productData2 = bestProduct.data;
     List<ProductDTO> products2 = productData2.map((json) => ProductDTO.fromJson(json: json)).toList();
 
@@ -63,6 +64,8 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0,
+        toolbarHeight: 40,
         title: Text("Amu Shop",
         style: TextStyle(
           fontFamily: 'Jalnan',
@@ -70,6 +73,13 @@ class _MainPageState extends State<MainPage> {
           fontWeight: FontWeight.w500
         ),
         ),
+        actions: [
+          IconButton(onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => ItemBasketPage())
+            );
+          }, icon: Icon(Icons.shopping_cart))
+        ],
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -92,8 +102,6 @@ class _MainPageState extends State<MainPage> {
             ),
             // 하위 카테고리 들?
             Container(),
-
-
             // 최신 상품 타이틀
             Container( // 최신 상품 title
               width: double.infinity,

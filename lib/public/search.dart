@@ -1,7 +1,7 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:flutter_practice_project/item_list_page.dart';
+import 'package:flutter_practice_project/page/item_list_page.dart';
 
 void search_bar(context, no) {
   showDialog(context: context, builder: (BuildContext ctx) {

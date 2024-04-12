@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_practice_project/models/ProductDTO.dart';
+import 'package:flutter_practice_project/page/user_login_page.dart';
 import 'package:flutter_practice_project/public/alert.dart';
+import 'package:flutter_practice_project/public/loginCheck.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_practice_project/public/appbar.dart';
-import 'package:flutter_practice_project/item_payment_page.dart';
+import 'package:flutter_practice_project/page/item_payment_page.dart';
 
-import 'constants.dart';
+import '../public/constants.dart';
 
 class ItemBasketPage extends StatefulWidget {
 
@@ -31,7 +33,7 @@ class _ItemBasketPage extends State<ItemBasketPage> {
 
 
   void GET_basketList() async {
-    Response response = await Dio().get("http://192.168.2.3:8080/basket_product/${await storage.read(key: 'login')}");
+    Response response = await Dio().get("http://$connectAddr:8080/basket_product/${await storage.read(key: 'login')}");
     List<dynamic> responseData = response.data;
     List<ProductDTO> products = responseData.map((json) => ProductDTO.fromJson(json: json)).toList();
 
@@ -49,19 +51,29 @@ class _ItemBasketPage extends State<ItemBasketPage> {
   }
 
 
-
+  void loginChecking() async {
+    if (!await loginCheck()) {
+      Navigator.of(context).pop();
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => UserLoginPage(no: 0, page: "list"))
+      );
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    loginChecking();
     GET_basketList();
   }
 
   @override
   Widget build(BuildContext context) {
-    String title = "장바구니 페이지";
+    String title = "장바구니";
     return Scaffold(
-      appBar: pub_app(title),
+      appBar: AppBar(
+        title: Text(title, style: TextStyle(fontSize: 25, fontFamily: 'Jalnan'),),
+      ),
       body: ListView.builder(
         itemCount: basketList.length,
         itemBuilder: (context, index) {
@@ -158,7 +170,7 @@ class _ItemBasketPage extends State<ItemBasketPage> {
                             "amount" : amount - 1
                           };
 
-                          Dio().patch('http://192.168.2.3:8080/shopCart_amount_update',
+                          Dio().patch('http://$connectAddr:8080/shopCart_amount_update',
                             data: data
                           );
 
@@ -186,7 +198,7 @@ class _ItemBasketPage extends State<ItemBasketPage> {
                             "amount" : amount + 1
                           };
 
-                          Dio().patch('http://192.168.2.3:8080/shopCart_amount_update',
+                          Dio().patch('http://$connectAddr:8080/shopCart_amount_update',
                               data: data
                           );
 
@@ -216,7 +228,7 @@ class _ItemBasketPage extends State<ItemBasketPage> {
                                         "no" : no
                                       };
 
-                                      Dio().delete('http://192.168.2.3:8080/shopCart_delete',
+                                      Dio().delete('http://$connectAddr:8080/shopCart_delete',
                                           data: data
                                       );
                                       Navigator.of(context).pop();

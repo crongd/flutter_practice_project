@@ -5,12 +5,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_practice_project/public/appbar.dart';
 import 'package:flutter_practice_project/models/ProductDTO.dart';
 import 'package:flutter_practice_project/public/loginCheck.dart';
-import 'package:flutter_practice_project/user_login_page.dart';
+import 'package:flutter_practice_project/page/user_login_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_practice_project/item_basket_page.dart';
+import 'package:flutter_practice_project/page/item_basket_page.dart';
 
-import 'constants.dart';
+import '../public/constants.dart';
 
 class ItemDetailsPage extends StatefulWidget {
   int no;
@@ -87,7 +87,7 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
   // }
 
   Future<ProductDTO> product_get() async {
-    Response response = await Dio().get('http://192.168.2.3:8080/product?no=$no');
+    Response response = await Dio().get('http://$connectAddr:8080/product?no=$no');
     dynamic responseData = response.data;
     ProductDTO resultData = ProductDTO.fromJson(json: responseData);
     return resultData; // ProductDTO 반환
@@ -129,7 +129,8 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
   Widget build(BuildContext context) {
     String title = "제품 상세 페이지";
     return Scaffold(
-      appBar: pub_app(title),
+      appBar: pub_app(title, context),
+
       body: FutureBuilder<ProductDTO> (
         future: product_get(),
         builder: (context, snapshot) {
@@ -210,7 +211,7 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
         },
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(15),
         child: FilledButton(
           onPressed: () async {
             // 추후 장바구니 담는 로직 추가 예정
@@ -222,7 +223,7 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
               };
 
               print(formData);
-              await Dio().post('http://192.168.2.3:8080/shopCart_product',
+              await Dio().post('http://$connectAddr:8080/shopCart_product',
                   options: Options(contentType: Headers.jsonContentType),
                   data: json.encode(formData)
               );

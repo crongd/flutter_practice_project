@@ -37,11 +37,11 @@ class CategoryDTO {
 
   @override
   String toString() {
-    return "ProductDTO{"
+    return "categoryDTO{"
         "no: $no,"
-        " title: $name,"
-        " mainImg: $parentNo,"
-        " images: $level,"
+        " name: $name,"
+        " parentNo: $parentNo,"
+        " level: $level,"
         " categorys: $categorys }";
   }
 

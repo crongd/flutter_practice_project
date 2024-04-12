@@ -1,39 +1,44 @@
 class UserDTO {
-  int? no;
   String? id;
-  String? pw;
-  String? name;
+  String? ci;
+  String? password;
+  String? email;
+  String? tel;
 
   UserDTO({
-    this.no,
     this.id,
-    this.pw,
-    this.name
+    this.ci,
+    this.password,
+    this.email,
+    this.tel
   });
 
   UserDTO.fromJson({required Map<String, dynamic> json}) {
-    no = json['no'];
     id = json['id'];
-    pw = json['pw'];
-    name = json['name'];
+    ci = json['ci'];
+    password = json['password'];
+    email = json['email'];
+    tel = json['tel'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
-    data['no'] = no;
     data['id'] = id;
-    data['pw'] = pw;
-    data['name'] = name;
+    data['ci'] = ci;
+    data['password'] = password;
+    data['email'] = email;
+    data['tel'] = tel;
     return data;
   }
 
   @override
   String toString() {
     return "UserDTO{"
-        "no: $no,"
-        " id: $id,"
-        " pw: $pw,"
-        " name: $name";
+        "id: $id,"
+        " ci: $ci,"
+        " password: $password,"
+        " email: $email,"
+        " tel: $tel";
   }
 
 }
