@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_practice_project/item_details_page.dart';
+import 'package:flutter_practice_project/main.dart';
 import 'package:flutter_practice_project/main_page.dart';
 import 'package:flutter_practice_project/models/ProductDTO.dart';
 import 'package:flutter_practice_project/public/loginCheck.dart';
@@ -17,10 +18,12 @@ import 'constants.dart';
 class ItemListPage extends StatefulWidget {
   int no;
   String? search;
+  String? title;
 
   ItemListPage({super.key,
     required this.no,
-    this.search
+    this.search,
+    this.title
   });
 
   @override
@@ -33,6 +36,7 @@ class _ItemListPageState extends State<ItemListPage> {
   String? selectedCategory;
   int cateNo = 0;
   String categoryName = "카테고리 선택";
+  String title = "제품 리스트 페이지";
 
 
   @override
@@ -42,6 +46,9 @@ class _ItemListPageState extends State<ItemListPage> {
     get_product_list();
     loginStatus();
     print(widget.search);
+    if (widget.title != null) {
+      title = widget.title!;
+    }
   }
 
   void get_product_list() async {
@@ -54,6 +61,7 @@ class _ItemListPageState extends State<ItemListPage> {
       setState(() {
         productList = products;
       });
+
     } else {
       print(cateNo);
       print(widget.search);
@@ -146,10 +154,13 @@ class _ItemListPageState extends State<ItemListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("제품 리스트 페이지"),
+        title: Text(title),
         centerTitle: true,
         leading: IconButton(onPressed: () {
-          MainPage();
+          Navigator.of(context).pop();
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => MyApp())
+          );
         },
           icon: Icon(Icons.navigate_before),
         ),

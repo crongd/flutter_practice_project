@@ -1,7 +1,10 @@
 
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_practice_project/constants.dart';
+import 'package:flutter_practice_project/item_details_page.dart';
 import 'package:flutter_practice_project/item_list_page.dart';
 
 import 'package:flutter_practice_project/main_page.dart';
@@ -68,8 +71,8 @@ class _MarketPageState extends State<MarketPage> {
         no = widget.no!;
       }
     });
-
   }
+
 
   Widget bodyWidget(int no) {
     print(no);
@@ -110,14 +113,65 @@ class _MarketPageState extends State<MarketPage> {
                 tooltip: '마이'
             ),
           ],
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
+          // showSelectedLabels: false,
+          // showUnselectedLabels: false,
           currentIndex: _selectedIndex,
           selectedItemColor: Colors.white,
           unselectedItemColor: Colors.grey,
           backgroundColor: Colors.black,
           onTap: _onItemTapped,
         )
+    );
+  }
+
+
+  Widget productContainer({
+    required int no,
+    required String title,
+    required String mainImg,
+    required int price
+  }) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => ItemDetailsPage(no: no))
+        );
+      },
+      child: Column(
+        children: [
+          CachedNetworkImage(
+            imageUrl: mainImg,
+            height: 150,
+            fit: BoxFit.fill,
+            placeholder: (context, url) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                ),
+              );
+            },
+            errorWidget: (context, url, error) {
+              return const Center(
+                child: Text("오류발생"),
+              );
+            },
+          ),
+          Container(
+            padding: const EdgeInsets.all(8),
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.all(3),
+            child: Text("${numberFormat.format(price)}원"),
+          )
+        ],
+      ),
     );
   }
 }
