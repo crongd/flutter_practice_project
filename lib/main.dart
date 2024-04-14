@@ -8,7 +8,7 @@ import 'package:flutter_practice_project/page/item_details_page.dart';
 import 'package:flutter_practice_project/page/item_list_page.dart';
 
 import 'package:flutter_practice_project/page/main_page.dart';
-import 'package:flutter_practice_project/public/my_page.dart';
+import 'package:flutter_practice_project/page/user_my_page.dart';
 import 'package:flutter_practice_project/page/category_page.dart';
 
 void main() {

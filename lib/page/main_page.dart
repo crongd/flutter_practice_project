@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_practice_project/page/item_basket_page.dart';
-import 'package:flutter_practice_project/public/my_page.dart';
+import 'package:flutter_practice_project/page/user_my_page.dart';
 import 'package:flutter_practice_project/page/category_page.dart';
 
 import '../public/constants.dart';

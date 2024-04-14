@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_practice_project/main.dart';
 import 'package:flutter_practice_project/public/loginCheck.dart';
-import 'package:flutter_practice_project/public/my_page.dart';
+import 'package:flutter_practice_project/page/user_my_page.dart';
 
 import '../models/CategoryDTO.dart';
 import 'user_login_page.dart';
