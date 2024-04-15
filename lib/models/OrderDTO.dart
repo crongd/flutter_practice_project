@@ -8,6 +8,7 @@ class OrderDTO {
   List<ProductDTO>? products;
   String? buyerAddr;
   String? buyerPostcode;
+  String? createdAt;
   int? amount;
 
   OrderDTO({
@@ -16,6 +17,7 @@ class OrderDTO {
     this.products,
     this.buyerAddr,
     this.buyerPostcode,
+    this.createdAt,
     this.amount
   });
 
@@ -27,6 +29,7 @@ class OrderDTO {
     }
     buyerAddr = json['buyerAddr'];
     buyerPostcode = json['buyerPostcode'];
+    createdAt = json['createdAt'];
     amount = json['amount'];
   }
 
@@ -39,6 +42,7 @@ class OrderDTO {
     }
     data['buyerAddr'] = buyerAddr;
     data['buyerPostcode'] = buyerPostcode;
+    data['createdAt'] = createdAt;
     data['amount'] = amount;
     return data;
   }
@@ -51,6 +55,7 @@ class OrderDTO {
         " products: $products,"
         " buyerAddr: $buyerAddr,"
         " buyerPostcode: $buyerPostcode,"
+        " createdAt: $createdAt,"
         " amount: $amount";
   }
 

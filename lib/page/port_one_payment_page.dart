@@ -27,7 +27,7 @@ class Payment extends StatelessWidget {
   Widget build(BuildContext context) {
     return IamportPayment(
       appBar: AppBar(
-        title: const Text('아임포트 결제'),
+        title: const Text('결제하기'),
       ),
       initialChild: Container(
         child: Center(
@@ -43,7 +43,7 @@ class Payment extends StatelessWidget {
         ),
       ),
       // [필수입력] 가맹점 식별코드
-      userCode: 'iamport',
+      userCode: 'imp07007375',
       data: PaymentData(
           payMethod: 'card',
           name: productName,

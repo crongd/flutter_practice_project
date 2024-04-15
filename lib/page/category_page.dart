@@ -105,6 +105,7 @@ class _ScreenState extends State<Screen> {
     required int index
   }) {
     return Container(
+      height: 50,
       width: double.infinity,
       child: TextButton(
           onPressed: () {
@@ -114,6 +115,7 @@ class _ScreenState extends State<Screen> {
             });
           },
           style: TextButton.styleFrom(
+            fixedSize: Size.fromHeight(double.infinity),
             foregroundColor: selectedIndex == index ? Colors.white : Colors.black,
             backgroundColor: selectedIndex == index ? Colors.grey : Colors.white,
             shape: RoundedRectangleBorder(

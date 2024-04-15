@@ -58,13 +58,17 @@ class _OrderListPageState extends State<OrderListPage> {
       body: ListView.builder(
           itemCount: orderList.length,
           itemBuilder: (context, index) {
-            return orderContainer(products: orderList[index].products!);
+            return orderContainer(
+                createdAt: orderList[index].createdAt ?? "",
+                products: orderList[index].products!
+            );
           }),
     );
   }
 
 
   Widget orderContainer({
+    required String createdAt,
     required List<ProductDTO> products,
   }) {
     return Column(
@@ -82,7 +86,7 @@ class _OrderListPageState extends State<OrderListPage> {
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: Text(
-                      '2024. 3. 26',
+                      createdAt,
                       style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -135,7 +139,6 @@ class _OrderListPageState extends State<OrderListPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
             ],
           ),
         ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_practice_project/page/order_list_page.dart';
+import 'package:flutter_practice_project/page/review_page.dart';
+import 'package:flutter_practice_project/page/user_info_page.dart';
 import 'package:flutter_practice_project/public/appbar.dart';
 
 class MyApp extends StatelessWidget {
@@ -29,11 +31,12 @@ class _MyPageState extends State<MyPage> {
         scrolledUnderElevation: 0,
         toolbarHeight: 40,
         title: Text("마이페이지",
-        style: TextStyle(
-        fontFamily: 'Jalnan',
-        // fontWeight: FontWeight.bold
-        fontWeight: FontWeight.w500
+          style: TextStyle(
+          fontFamily: 'Jalnan',
+          // fontWeight: FontWeight.bold
+          fontWeight: FontWeight.w500
         )),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -50,6 +53,9 @@ class _MyPageState extends State<MyPage> {
                   GestureDetector(
                     onTap: () {
                       print("내 정보 관리 페이지 이동");
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => UserInfoPage())
+                      );
                     },
                     child: Row(
                       children: [
@@ -74,28 +80,18 @@ class _MyPageState extends State<MyPage> {
                 );
               },
               child: Container(
+                color: Colors.white,
                 height: 100,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text('주문 목록' ,style: TextStyle(fontSize: 16, fontFamily: 'Cafe'),),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Icon(Icons.navigate_next),
-                        SizedBox(
-                          width: 10,
-                        )
-                      ],
-                    )
-                  ],
-                ),
+                child: const Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('주문 목록' ,style: TextStyle(fontSize: 16, fontFamily: 'Cafe'),),
+                      Icon(Icons.navigate_next),
+                    ],
+                  ),
+                )
               )
             ),
             Container(
@@ -105,65 +101,50 @@ class _MyPageState extends State<MyPage> {
             ),
             GestureDetector(
                 onTap: () {
-                  print('리뷰 관리 페이지 이동');
+                  print('리뷰 관리 이동');
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => ReviewPage())
+                  );
                 },
                 child: Container(
-                  height: 100,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
+                    color: Colors.white,
+                    height: 100,
+                    child: const Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SizedBox(
-                            width: 10,
-                          ),
                           Text('리뷰 관리' ,style: TextStyle(fontSize: 16, fontFamily: 'Cafe'),),
+                          Icon(Icons.navigate_next),
                         ],
                       ),
-                      Row(
-                        children: [
-                          Icon(Icons.navigate_next),
-                          SizedBox(
-                            width: 10,
-                          )
-                        ],
-                      )
-                    ],
-                  ),
+                    )
                 )
             ),
             Container(
               width: double.infinity,
               height: 1,
               color: Colors.grey,
-            ),
-            InkWell(
+            ),GestureDetector(
                 onTap: () {
                   print('내 정보 관리 페이지 이동');
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => UserInfoPage())
+                  );
                 },
-                child: SizedBox(
-                  height: 100,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
+                child: Container(
+                    height: 100,
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SizedBox(
-                            width: 10,
-                          ),
                           Text('내 정보 관리' ,style: TextStyle(fontSize: 16, fontFamily: 'Cafe'),),
+                          Icon(Icons.navigate_next),
                         ],
                       ),
-                      Row(
-                        children: [
-                          Icon(Icons.navigate_next),
-                          SizedBox(
-                            width: 10,
-                          )
-                        ],
-                      )
-                    ],
-                  ),
+                    )
                 )
             ),
             Container(
