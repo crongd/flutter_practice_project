@@ -3,6 +3,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_practice_project/page/user_login_page.dart';
 import 'package:flutter_practice_project/public/constants.dart';
 import 'package:flutter_practice_project/page/item_details_page.dart';
 import 'package:flutter_practice_project/page/item_list_page.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_practice_project/page/item_list_page.dart';
 import 'package:flutter_practice_project/page/main_page.dart';
 import 'package:flutter_practice_project/page/user_my_page.dart';
 import 'package:flutter_practice_project/page/category_page.dart';
+import 'package:flutter_practice_project/public/loginCheck.dart';
 
 void main() {
   runApp(const MyApp());
@@ -43,12 +45,18 @@ class MarketPage extends StatefulWidget {
 
   @override
   State<MarketPage> createState() => _MarketPageState();
+
+  static _MarketPageState? of(BuildContext context) => context.findAncestorStateOfType();
+
+  static void changePage(BuildContext context, int index) {
+    _MarketPageState? state = MarketPage.of(context);
+    state?.changePage(index);
+  }
 }
 
 class _MarketPageState extends State<MarketPage> {
   static int no = 0;
-  static int cateNo = 0;
-  int _selectedIndex = 0;
+  static int selectedIndex = 0;
 
   final List<Widget> _widgetOptions = <Widget>[
     Screen(),
@@ -57,9 +65,23 @@ class _MarketPageState extends State<MarketPage> {
     ItemListPage(no: no)
   ];
 
-  void _onItemTapped(int index) {
+  void _onItemTapped(int index) async {
+    if(index == 2) {
+      if(!await loginCheck()) {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => UserLoginPage(no: 0, page: "page"))
+        );
+        return;
+      }
+    }
     setState(() {
-      _selectedIndex = index;
+      selectedIndex = index;
+    });
+  }
+
+  void changePage(int index) {
+    setState(() {
+      selectedIndex = index;
     });
   }
 
@@ -68,7 +90,7 @@ class _MarketPageState extends State<MarketPage> {
     super.initState();
 
     setState(() {
-      _selectedIndex = 1;
+      selectedIndex = 1;
       if (widget.no != null) {
         no = widget.no!;
       }
@@ -80,7 +102,7 @@ class _MarketPageState extends State<MarketPage> {
     print(mainStatus);
     if (mainStatus == 0) {
       return SafeArea(
-          child: _widgetOptions.elementAt(_selectedIndex)
+          child: _widgetOptions.elementAt(selectedIndex)
       );
     } else {
       return SafeArea(
@@ -117,7 +139,7 @@ class _MarketPageState extends State<MarketPage> {
           ],
           // showSelectedLabels: false,
           // showUnselectedLabels: false,
-          currentIndex: _selectedIndex,
+          currentIndex: selectedIndex,
           selectedItemColor: Colors.white,
           unselectedItemColor: Colors.grey,
           backgroundColor: Colors.black,

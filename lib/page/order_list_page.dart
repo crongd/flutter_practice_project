@@ -29,8 +29,7 @@ class _OrderListPageState extends State<OrderListPage> {
   }
 
   void order_update() async {
-    print(await storage.read(key: 'login'));
-    Response respOrder = await Dio().get("http://$connectAddr:8080/get_orders?userId=${storage.read(key: 'login')}");
+    Response respOrder = await Dio().get("http://$connectAddr:8080/get_orders?userId=${await storage.read(key: 'login')}");
     // print(response);
     List<dynamic> productData = respOrder.data;
     List<OrderDTO> orders = productData.map((json) => OrderDTO.fromJson(json: json)).toList();

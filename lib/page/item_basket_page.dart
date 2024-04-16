@@ -72,7 +72,9 @@ class _ItemBasketPage extends State<ItemBasketPage> {
     String title = "장바구니";
     return Scaffold(
       appBar: AppBar(
-        title: Text(title, style: TextStyle(fontSize: 25, fontFamily: 'Jalnan'),),
+        scrolledUnderElevation: 0,
+        toolbarHeight: 40,
+        title: Text(title, style: TextStyle(fontSize: 20, fontFamily: 'Jalnan'),),
         centerTitle: true,
       ),
       body: ListView.builder(

@@ -4,7 +4,9 @@ import 'package:flutter_practice_project/page/review_page.dart';
 import 'package:flutter_practice_project/page/user_info_page.dart';
 import 'package:flutter_practice_project/page/user_login_page.dart';
 import 'package:flutter_practice_project/public/appbar.dart';
+import 'package:flutter_practice_project/public/constants.dart';
 import 'package:flutter_practice_project/public/loginCheck.dart';
+import 'package:flutter_practice_project/main.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -26,6 +28,22 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
+
+  @override
+  void initState() {
+    super.initState();
+    loginchecking();
+  }
+
+  void loginchecking() async {
+    if(!await loginCheck()) {
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => UserLoginPage(no: 0, page: "page"))
+      );
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,9 +83,7 @@ class _MyPageState extends State<MyPage> {
                         Icon(Icons.navigate_next),
                         IconButton(onPressed: () {
                           storage.delete(key: 'login');
-                          Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) => UserLoginPage(no: 0, page: "page"))
-                          );
+                          MarketPage.changePage(context, 1);
                         }, icon: Icon(Icons.logout))
                       ]
                     ),
