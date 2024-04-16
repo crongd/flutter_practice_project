@@ -127,7 +127,7 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    String title = "제품 상세 페이지";
+    String title = "";
     return Scaffold(
       appBar: pub_app(title, context),
 

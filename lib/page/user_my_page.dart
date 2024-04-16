@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_practice_project/page/order_list_page.dart';
 import 'package:flutter_practice_project/page/review_page.dart';
 import 'package:flutter_practice_project/page/user_info_page.dart';
+import 'package:flutter_practice_project/page/user_login_page.dart';
 import 'package:flutter_practice_project/public/appbar.dart';
+import 'package:flutter_practice_project/public/loginCheck.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -60,7 +62,13 @@ class _MyPageState extends State<MyPage> {
                     child: Row(
                       children: [
                         Text("jaeho9859", style: TextStyle(fontSize: 16)),
-                        Icon(Icons.navigate_next)
+                        Icon(Icons.navigate_next),
+                        IconButton(onPressed: () {
+                          storage.delete(key: 'login');
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => UserLoginPage(no: 0, page: "page"))
+                          );
+                        }, icon: Icon(Icons.logout))
                       ]
                     ),
                   )

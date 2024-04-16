@@ -55,7 +55,7 @@ class _ItemBasketPage extends State<ItemBasketPage> {
     if (!await loginCheck()) {
       Navigator.of(context).pop();
       Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => UserLoginPage(no: 0, page: "list"))
+        MaterialPageRoute(builder: (context) => UserLoginPage(no: 0, page: '',))
       );
     }
   }
@@ -73,6 +73,7 @@ class _ItemBasketPage extends State<ItemBasketPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(title, style: TextStyle(fontSize: 25, fontFamily: 'Jalnan'),),
+        centerTitle: true,
       ),
       body: ListView.builder(
         itemCount: basketList.length,

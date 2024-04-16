@@ -52,17 +52,18 @@ class _UserLoginPage extends State<UserLoginPage> {
       print('로그인 성공');
 
       await storage.write(key: "login", value: id);
+      // Navigator.of(context).pop();
       Navigator.of(context).pop();
 
-      if(widget.page == "list") {
-        // Navigator.of(context).pop();
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => ItemListPage(no: widget.no))
-        );
-      } else {
-        // Navigator.of(context).pop();
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => ItemDetailsPage(no: widget.no)));
-      }
+      // if(widget.page == "list") {
+      //   // Navigator.of(context).pop();
+      //   Navigator.of(context).push(
+      //       MaterialPageRoute(builder: (context) => ItemListPage(no: widget.no))
+      //   );
+      // } else if(widget.page == "") {
+      //   // Navigator.of(context).pop();
+      //   Navigator.of(context).push(MaterialPageRoute(builder: (context) => ItemDetailsPage(no: widget.no)));
+      // }
 
     } else {
       alert(context, "입력한 정보가 일치하지 않음");
@@ -73,7 +74,9 @@ class _UserLoginPage extends State<UserLoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("로그인"),
+        scrolledUnderElevation: 0,
+        toolbarHeight: 40,
+        title: Text("로그인", style: TextStyle(fontSize: 20, fontFamily: 'Jalnan'),),
         centerTitle: true,
       ),
       body: SingleChildScrollView(

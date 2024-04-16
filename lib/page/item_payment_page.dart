@@ -88,7 +88,10 @@ class _ItemPaymentPage extends State<ItemPaymentPage> {
   Widget build(BuildContext context) {
     String title = "결제 페이지";
     return Scaffold(
-      appBar: pub_app(title, context),
+      appBar: AppBar(
+        title: Text('결제 페이지', style: TextStyle(fontSize: 20, fontFamily: 'Jalnan'),),
+        centerTitle: true,
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -135,7 +138,7 @@ class _ItemPaymentPage extends State<ItemPaymentPage> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Text("${numberFormat.format(basketList[0].price)}원"),
+                        // Text("${numberFormat.format(basketList[0].price)}원"),
                         Row(
                           children: [
                             const Text('총 수량: '),

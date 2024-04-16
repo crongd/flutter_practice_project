@@ -48,7 +48,9 @@ class _UserJoinPage extends State<UserJoinPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("회원가입"),
+        scrolledUnderElevation: 0,
+        toolbarHeight: 40,
+        title: Text("회원가입", style: TextStyle(fontSize: 20, fontFamily: 'Jalnan'),),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
