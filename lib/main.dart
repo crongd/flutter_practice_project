@@ -56,7 +56,7 @@ class MarketPage extends StatefulWidget {
 
 class _MarketPageState extends State<MarketPage> {
   static int no = 0;
-  static int selectedIndex = 0;
+  int selectedIndex = 1;
 
   final List<Widget> _widgetOptions = <Widget>[
     Screen(),
@@ -90,7 +90,6 @@ class _MarketPageState extends State<MarketPage> {
     super.initState();
 
     setState(() {
-      selectedIndex = 1;
       if (widget.no != null) {
         no = widget.no!;
       }
