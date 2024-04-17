@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_practice_project/models/ProductDTO.dart';
+import 'package:flutter_practice_project/models/ReviewDTO.dart';
 import 'package:flutter_practice_project/public/constants.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -19,6 +20,8 @@ class _ReviewPageState extends State<ReviewPage> with TickerProviderStateMixin {
 
   List<ProductDTO> writeableReview = [];
   List<ProductDTO> writtenReview = [];
+
+  int rate = 0;
 
   final storage = FlutterSecureStorage();
 
@@ -144,7 +147,7 @@ class _ReviewPageState extends State<ReviewPage> with TickerProviderStateMixin {
                           TextButton(
                             onPressed: () {
                               print("productNo 들고 리뷰 페이지 이동");
-                              bottom_sheet();
+                              bottom_sheet(orderProductNo: orderProductNo, productNo: productNo);
                             },
                             child: Text('리뷰 작성하기', style: TextStyle(fontSize: 16, fontFamily: 'Cafe', color: Colors.black))
                           ),
@@ -166,7 +169,10 @@ class _ReviewPageState extends State<ReviewPage> with TickerProviderStateMixin {
     return Container();
   }
 
-  Future bottom_sheet() {
+  Future bottom_sheet({
+    required orderProductNo,
+    required productNo,
+}) {
     return showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -197,7 +203,8 @@ class _ReviewPageState extends State<ReviewPage> with TickerProviderStateMixin {
                       itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
                       itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber,),
                       onRatingUpdate: (rating) {
-                        print(rating);
+                        rate = rating.toInt();
+                        print(rate);
                       },
                     ),
                     TextField(
@@ -213,7 +220,17 @@ class _ReviewPageState extends State<ReviewPage> with TickerProviderStateMixin {
                       color: Colors.orange,
                       child: Padding(
                         padding: const EdgeInsets.all(10),
-                        child: TextButton(onPressed: () {}, child: Text('전송', style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),)),
+                        child: TextButton(onPressed: () async {
+                          ReviewDTO review = ReviewDTO(
+                            userId: await storage.read(key: 'login'),
+                            orderProductNo: orderProductNo,
+                            productNo: productNo,
+                            content: _contentController.text,
+                            rate: rate
+                          );
+                          //TODO: 여기 하고있음
+                          Dio().post('http://$connectAddr:8080/review_write',data: review.toJson());
+                        }, child: Text('전송', style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),)),
                       ),
                     )
 
