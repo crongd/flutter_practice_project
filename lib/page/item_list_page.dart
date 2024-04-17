@@ -33,7 +33,6 @@ class ItemListPage extends StatefulWidget {
 
 class _ItemListPageState extends State<ItemListPage> {
   List<ProductDTO> productList = [];
-  List<CategoryDTO> categoryList = [];
   // String? selectedCategory;
   int cateNo = 0;
   // String categoryName = "카테고리 선택";
@@ -74,75 +73,9 @@ class _ItemListPageState extends State<ItemListPage> {
       });
     }
 
-    if(widget.no != 0) {
-      Response respCategory = await Dio().get("http://$connectAddr:8080/children_category?no=$cateNo");
-      List<dynamic> categoryData = respCategory.data;
-      List<CategoryDTO> categories = categoryData.map((json) => CategoryDTO.fromJson(json: json)).toList();
-
-      setState(() {
-        categoryList = categories ?? [];
-      });
-    }
 
     widget.search = "";
   }
-
-  // Widget dropdown() {
-  //   if(categoryList.isEmpty) {
-  //     return const SizedBox(width: 0, height: 0,);
-  //   } else {
-  //     return DropdownButton(
-  //         value: selectedCategory,
-  //         hint: Text("$categoryName"),
-  //         items: categoryList.map((category) {
-  //           return DropdownMenuItem(
-  //               value: category.no.toString(),
-  //               child: Text("${category.name}")
-  //           );
-  //         }).toList(),
-  //         onChanged: (value) {
-  //           cateNo = int.parse(value!);
-  //           setState(() {
-  //             get_product_list();
-  //             categoryName = categoryList.singleWhere((element) => element.no == int.parse(value)).name!;
-  //             // categoryList.forEach((element) {
-  //             //   print(element.no);
-  //             // });
-  //             // print("value" + value);
-  //             print(categoryName);
-  //           });
-  //         }
-  //     );
-  //   }
-  // }
-
-
-
-  // void loginStatus() async {
-  //   loginIcon = [];
-  //   print("loginStatus");
-  //   print(await loginCheck());
-  //   if(await loginCheck()) {
-  //     setState(() {
-  //       loginIcon.add(TextButton(onPressed: (){
-  //         final storage = new FlutterSecureStorage();
-  //         storage.delete(key: 'login');
-  //         Navigator.of(context).pop();
-  //         Navigator.of(context).push(
-  //           MaterialPageRoute(builder: (context) => ItemListPage(no: widget.no))
-  //         );
-  //       }, child: Text('로그아웃'),));
-  //     });
-  //   } else {
-  //     setState(() {
-  //       loginIcon.add(TextButton(onPressed: (){
-  //         setState(() {
-  //           Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserLoginPage(no: widget.no, page: "list",)));
-  //         });
-  //       }, child: Text('로그인')));
-  //     });
-  //   }
-  // }
 
 
   @override

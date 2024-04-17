@@ -86,7 +86,6 @@ class _ItemPaymentPage extends State<ItemPaymentPage> {
 
   @override
   Widget build(BuildContext context) {
-    String title = "결제 페이지";
     return Scaffold(
       appBar: AppBar(
         title: Text('결제 페이지', style: TextStyle(fontSize: 20, fontFamily: 'Jalnan'),),

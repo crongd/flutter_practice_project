@@ -8,6 +8,7 @@ class ProductDTO {
   List<OptionDTO>? options;
   int? price;
   int? amount;
+  int? orderProductNo;
 
   ProductDTO({
     this.no,
@@ -16,7 +17,8 @@ class ProductDTO {
     this.images,
     this.options,
     this.price,
-    this.amount
+    this.amount,
+    this.orderProductNo
   });
 
   ProductDTO.fromJson({required Map<String, dynamic> json}) {
@@ -29,6 +31,7 @@ class ProductDTO {
     }
     price = json['price'];
     amount = json['amount'];
+    orderProductNo = json['orderProductNo'];
   }
 
   Map<String, dynamic> toJson() {
@@ -42,6 +45,7 @@ class ProductDTO {
     }
     data['price'] = price;
     data['amount'] = amount;
+    data['orderProductNo'] = orderProductNo;
     return data;
   }
 
@@ -54,7 +58,8 @@ class ProductDTO {
         " images: $images,"
         " options: $options"
         " price: $price,"
-        " amount: $amount}";
+        " amount: $amount,"
+        " orderProductNo: $orderProductNo}";
   }
 
 }

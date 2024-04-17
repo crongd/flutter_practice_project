@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_practice_project/page/user_login_page.dart';
 import 'package:flutter_practice_project/page/user_re_password_page.dart';
+import 'package:flutter_practice_project/public/loginCheck.dart';
 
 class UserInfoPage extends StatefulWidget {
   const UserInfoPage({super.key});
@@ -9,6 +11,21 @@ class UserInfoPage extends StatefulWidget {
 }
 
 class _UserInfoPageState extends State<UserInfoPage> {
+
+  @override
+  void initState() {
+    super.initState();
+    loginChecking();
+  }
+
+  void loginChecking() async {
+    if(!await loginCheck()) {
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => UserLoginPage(no: 0, page: "page"))
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

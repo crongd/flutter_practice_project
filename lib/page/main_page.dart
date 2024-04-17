@@ -23,13 +23,7 @@ class _MainPageState extends State<MainPage> {
   int _current = 0;
   final CarouselController _controller = CarouselController();
 
-  List imageList= [
-    "https://flexible.img.hani.co.kr/flexible/normal/970/777/imgdb/resize/2019/0926/00501881_20190926.JPG",
-    "https://health.chosun.com/site/data/img_dir/2023/07/17/2023071701753_0.jpg",
-    "https://www.fitpetmall.com/wp-content/uploads/2023/10/230420-0668-1.png",
-    "https://cdn.hkbs.co.kr/news/photo/202104/628798_374207_2710.png",
-    "https://cdn.hellodd.com/news/photo/202005/71835_craw1.jpg"
-  ];
+  List imageList= [];
 
 
   @override
@@ -49,6 +43,10 @@ class _MainPageState extends State<MainPage> {
     Response bestProduct = await Dio().get("http://$connectAddr:8080/best_selling_products");
     List<dynamic> productData2 = bestProduct.data;
     List<ProductDTO> products2 = productData2.map((json) => ProductDTO.fromJson(json: json)).toList();
+
+    Response mainImage = await Dio().get('http://$connectAddr:8080/main_image');
+    List maindata = mainImage.data;
+    imageList = maindata;
 
     setState(() {
       recentProducts = products;

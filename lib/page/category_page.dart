@@ -20,16 +20,15 @@ class _ScreenState extends State<Screen> {
   List<CategoryDTO> categoryList = [];
   List<CategoryDTO> rowCategoryList = [];
   int selectedIndex = 0;
-  String title = "카테고리";
 
   @override
   void initState() {
     super.initState();
-    GET_parent_category();
+    GET_category();
 
   }
 
-  void GET_parent_category() async {
+  void GET_category() async {
     Response response = await Dio().get('http://$connectAddr:8080/all_category');
     List<dynamic> responseData = response.data;
     setState(() {
@@ -43,7 +42,7 @@ class _ScreenState extends State<Screen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: pub_app(title, context),
+      appBar: pub_app("카테고리", context),
       body: Container(
         child: Row(
           children: [

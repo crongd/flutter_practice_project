@@ -8,6 +8,8 @@ import 'package:flutter_practice_project/public/constants.dart';
 import 'package:flutter_practice_project/public/loginCheck.dart';
 import 'package:flutter_practice_project/main.dart';
 
+import '../models/UserDTO.dart';
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -29,13 +31,19 @@ class MyPage extends StatefulWidget {
 
 class _MyPageState extends State<MyPage> {
 
+  UserDTO? user;
+
   @override
   void initState() {
     super.initState();
-    loginchecking();
+    loginChecking();
+  }
+  
+  void get_user_info() async {
+    // 유저 정보 조회
   }
 
-  void loginchecking() async {
+  void loginChecking() async {
     if(!await loginCheck()) {
       Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => UserLoginPage(no: 0, page: "page"))
