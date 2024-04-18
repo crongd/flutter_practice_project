@@ -90,6 +90,8 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
     Response response = await Dio().get('http://$connectAddr:8080/product?no=$no');
     dynamic responseData = response.data;
     ProductDTO resultData = ProductDTO.fromJson(json: responseData);
+    print(resultData);
+    productDTO = resultData;
     return resultData; // ProductDTO 반환
   }
 
@@ -127,9 +129,8 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    String title = "";
     return Scaffold(
-      appBar: pub_app(title, context),
+      appBar: pub_app("", context),
 
       body: FutureBuilder<ProductDTO> (
         future: product_get(),
@@ -168,7 +169,7 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
                           );
                         },
                       ),
-                    ),
+                    ), // 메인 이미지
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       child: Text(
@@ -178,7 +179,7 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ),
+                    ), // 상품 제목
                     Container(
                         padding: const EdgeInsets.symmetric(vertical: 20),
                         child: Row(
@@ -197,12 +198,26 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
                             ),
                           ],
                         )
-                    ),
+                    ), // 옵션과 가격
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       child: Column(
                         children: images,
                       ),
+                    ), // 상세 이미지
+                    // ListView.builder(itemBuilder: itemBuilder)
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: productDTO?.reviews?.length,
+                      itemBuilder: (context, index) {
+                        return review(
+                          no: productDTO!.reviews?[index].no,
+                          userId: productDTO!.reviews?[index].userId,
+                          writeDate: productDTO!.reviews?[index].writeDate,
+                          content: productDTO!.reviews?[index].content,
+                          upCount: productDTO!.reviews?[index].users?.length
+                        );
+                      },
                     )
                   ],
                 )
@@ -257,8 +272,64 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
           },
           child: const Text("장바구니 담기"),
         ),
+      ), // bottomNavigation
+    );
+  }
+
+  Widget review({
+    required no,
+    required userId,
+    required writeDate,
+    required content,
+    required upCount
+}) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(10),
+      child: Container(
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          border: Border.all()
+        ),
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(userId, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                Text(writeDate)
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                    child: Text(content, overflow: TextOverflow.clip,)
+                ),
+                TextButton(
+                  onPressed: () async {
+                    Dio().post('http://$connectAddr:8080/review_like?reviewNo=$no&userId=${await storage.read(key: 'login')}');
+                  },
+                  child: Row(
+                    children: [
+                      Icon(Icons.thumb_up, color: Colors.black,),
+                      Padding(
+                        padding: EdgeInsets.all(5),
+                        child: Text("$upCount", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),),
+                      )
+                    ],
+                  )
+                ),
+                // IconButton(onPressed: () {}, icon: Icon(Icons.thumb_up))
+              ],
+            )
+          ],
+        ),
       ),
     );
+
   }
 
 }

@@ -1,4 +1,5 @@
 import 'package:flutter_practice_project/models/OptionDTO.dart';
+import 'package:flutter_practice_project/models/ReviewDTO.dart';
 
 class ProductDTO {
   int? no;
@@ -6,6 +7,7 @@ class ProductDTO {
   String? mainImg;
   List<String>? images;
   List<OptionDTO>? options;
+  List<ReviewDTO>? reviews;
   int? price;
   int? amount;
   int? orderProductNo;
@@ -16,6 +18,7 @@ class ProductDTO {
     this.mainImg,
     this.images,
     this.options,
+    this.reviews,
     this.price,
     this.amount,
     this.orderProductNo
@@ -28,6 +31,9 @@ class ProductDTO {
     images = List<String>.from(json['images'] ?? []);
     if(json['options'] != null) {
       options = (json['options'] as List).map((json) => OptionDTO.fromJson(json: json)).toList();
+    }
+    if(json['reviews'] != null) {
+      reviews = (json['reviews'] as List).map((json) => ReviewDTO.fromJson(json: json)).toList();
     }
     price = json['price'];
     amount = json['amount'];
@@ -43,6 +49,9 @@ class ProductDTO {
     if (options != null) {
       data['options'] = options!.map((option) => option.toJson()).toList();
     }
+    if (reviews != null) {
+      data['reviews'] = reviews!.map((review) => review.toJson()).toList();
+    }
     data['price'] = price;
     data['amount'] = amount;
     data['orderProductNo'] = orderProductNo;
@@ -56,7 +65,8 @@ class ProductDTO {
         " title: $title,"
         " mainImg: $mainImg,"
         " images: $images,"
-        " options: $options"
+        " options: $options,"
+        " reviews: $reviews,"
         " price: $price,"
         " amount: $amount,"
         " orderProductNo: $orderProductNo}";
