@@ -32,7 +32,7 @@ class _UserVerificationState extends State<UserVerificationPage> {
                 ),
                 TextButton(
                   onPressed: () {
-
+                    // 현재 비밀번호로 검증
                   },
                   child: Text('확인'),
                 )
