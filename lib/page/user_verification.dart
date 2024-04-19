@@ -1,4 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_practice_project/public/constants.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class UserVerificationPage extends StatefulWidget {
   const UserVerificationPage({super.key});
@@ -8,6 +11,8 @@ class UserVerificationPage extends StatefulWidget {
 }
 
 class _UserVerificationState extends State<UserVerificationPage> {
+
+  final storage = const FlutterSecureStorage();
 
   final TextEditingController _pwController = TextEditingController();
 
@@ -33,6 +38,7 @@ class _UserVerificationState extends State<UserVerificationPage> {
                 TextButton(
                   onPressed: () {
                     //TODO: 현재 비밀번호로 검증
+                    Dio().post('http://$connectAddr:8080/user_login');
                   },
                   child: Text('확인'),
                 )
