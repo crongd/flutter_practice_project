@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_practice_project/models/ProductDTO.dart';
 import 'package:flutter_practice_project/page/order_list_page.dart';
 import 'package:flutter_practice_project/page/review_page.dart';
 import 'package:flutter_practice_project/page/user_info_page.dart';
@@ -7,6 +9,7 @@ import 'package:flutter_practice_project/public/appbar.dart';
 import 'package:flutter_practice_project/public/constants.dart';
 import 'package:flutter_practice_project/public/loginCheck.dart';
 import 'package:flutter_practice_project/main.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../models/UserDTO.dart';
 
@@ -31,16 +34,27 @@ class MyPage extends StatefulWidget {
 
 class _MyPageState extends State<MyPage> {
 
+  final storage = const FlutterSecureStorage();
+
+  // String? userId;
   UserDTO? user;
 
   @override
   void initState() {
     super.initState();
     loginChecking();
+    get_user_info();
+    // setState(() async {
+    //   userId = await storage.read(key: 'login');
+    // });
   }
   
   void get_user_info() async {
     // 유저 정보 조회
+    Response resp = await Dio().get('http://$connectAddr:8080/user_info?userId=${await storage.read(key: 'login')}');
+    setState(() {
+      user = UserDTO.fromJson(json: resp.data);
+    });
   }
 
   void loginChecking() async {
@@ -80,14 +94,13 @@ class _MyPageState extends State<MyPage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      print("내 정보 관리 페이지 이동");
                       Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => UserInfoPage())
+                        MaterialPageRoute(builder: (context) => UserInfoPage(user: user,))
                       );
                     },
                     child: Row(
                       children: [
-                        Text("jaeho9859", style: TextStyle(fontSize: 16)),
+                        Text("${user?.id}", style: TextStyle(fontSize: 16)),
                         Icon(Icons.navigate_next),
                         IconButton(onPressed: () {
                           storage.delete(key: 'login');
@@ -161,7 +174,7 @@ class _MyPageState extends State<MyPage> {
                 onTap: () {
                   print('내 정보 관리 페이지 이동');
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => UserInfoPage())
+                    MaterialPageRoute(builder: (context) => UserInfoPage(user: user,))
                   );
                 },
                 child: Container(

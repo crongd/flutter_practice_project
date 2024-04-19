@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class UserRePasswordPage extends StatefulWidget {
   const UserRePasswordPage({super.key});
@@ -8,6 +9,9 @@ class UserRePasswordPage extends StatefulWidget {
 }
 
 class _UserRePasswordPageState extends State<UserRePasswordPage> {
+
+  final storage = const FlutterSecureStorage();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

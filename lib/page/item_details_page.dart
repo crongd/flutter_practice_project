@@ -29,16 +29,18 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
 
 
   ProductDTO? productDTO;
-  int? no;
+  int? productNo;
   List<Widget> images = [];
   String? selectedOptionNo;
   String dropTitle = "옵션 선택";
+  String? userId;
 
   @override
   void initState() {
     super.initState();
-    no = widget.no;
+    productNo = widget.no;
     product_get();
+
   }
 
   Widget image_to_widget(String imageUrl) {
@@ -87,11 +89,12 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
   // }
 
   Future<ProductDTO> product_get() async {
-    Response response = await Dio().get('http://$connectAddr:8080/product?no=$no');
+    Response response = await Dio().get('http://$connectAddr:8080/product?no=$productNo');
     dynamic responseData = response.data;
     ProductDTO resultData = ProductDTO.fromJson(json: responseData);
     print(resultData);
     productDTO = resultData;
+    userId = await storage.read(key: 'login');
     return resultData; // ProductDTO 반환
   }
 
@@ -212,10 +215,11 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
                       itemBuilder: (context, index) {
                         return review(
                           no: productDTO!.reviews?[index].no,
-                          userId: productDTO!.reviews?[index].userId,
+                          writeUser: productDTO!.reviews?[index].userId,
                           writeDate: productDTO!.reviews?[index].writeDate,
                           content: productDTO!.reviews?[index].content,
-                          upCount: productDTO!.reviews?[index].users?.length
+                          upCount: productDTO!.reviews?[index].users?.length,
+                          index: index
                         );
                       },
                     )
@@ -233,7 +237,7 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
             if(await loginCheck()) {
               var formData = {
                 "userId" : await storage.read(key: 'login'),
-                "productNo" : no,
+                "productNo" : productNo,
                 "optionNo" : selectedOptionNo
               };
 
@@ -266,7 +270,7 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
             } else {
               // alert(context, "로그인이 필요한 시스템임");
               Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => UserLoginPage(no: no!, page: "detail",))
+                  MaterialPageRoute(builder: (context) => UserLoginPage(no: productNo!, page: "detail",))
               );
             }
           },
@@ -278,10 +282,11 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
 
   Widget review({
     required no,
-    required userId,
+    required writeUser,
     required writeDate,
     required content,
-    required upCount
+    required upCount,
+    required index
 }) {
     return Container(
       width: double.infinity,
@@ -298,7 +303,7 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(userId, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                Text(writeUser, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
                 Text(writeDate)
               ],
             ),
@@ -308,20 +313,65 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
                 Expanded(
                     child: Text(content, overflow: TextOverflow.clip,)
                 ),
-                TextButton(
-                  onPressed: () async {
-                    Dio().post('http://$connectAddr:8080/review_like?reviewNo=$no&userId=${await storage.read(key: 'login')}');
-                  },
-                  child: Row(
-                    children: [
-                      Icon(Icons.thumb_up, color: Colors.black,),
-                      Padding(
-                        padding: EdgeInsets.all(5),
-                        child: Text("$upCount", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),),
+                if (!(productDTO!.reviews?[index].users!.contains(userId) == true))...[
+                  TextButton(
+                      onPressed: () async {
+                        if (!await loginCheck()) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => UserLoginPage(no: 0, page: "page"))
+                          );
+                          return;
+                        }
+                        Dio().post('http://$connectAddr:8080/review_like?reviewNo=$no&userId=${userId}');
+
+                        setState(() {
+                          upCount++;
+                        });
+                        // Navigator.of(context).pop();
+                        // Navigator.of(context).push(
+                        //   MaterialPageRoute(builder: (context) => ItemDetailsPage(no: productNo ?? 0))
+                        // );
+                      },
+                      child: Row(
+                        children: [
+                          Icon(Icons.thumb_up_alt_outlined, color: Colors.black,),
+                          Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Text("$upCount", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),),
+                          )
+                        ],
                       )
-                    ],
-                  )
-                ),
+                  ),
+                ] else...[
+                  TextButton(
+                      onPressed: () async {
+                        if (!await loginCheck()) {
+                          Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) => UserLoginPage(no: 0, page: "page"))
+                          );
+                          return;
+                        }
+                        Dio().delete('http://$connectAddr:8080/review_like?reviewNo=$no&userId=${userId}');
+
+                        setState(() {
+                          upCount++;
+                        });
+                        // Navigator.of(context).pop();
+                        // Navigator.of(context).push(
+                        //   MaterialPageRoute(builder: (context) => ItemDetailsPage(no: productNo ?? 0))
+                        // );
+                      },
+                      child: Row(
+                        children: [
+                          Icon(Icons.thumb_up, color: Colors.black,),
+                          Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Text("$upCount", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),),
+                          )
+                        ],
+                      )
+                  ),
+                ]
                 // IconButton(onPressed: () {}, icon: Icon(Icons.thumb_up))
               ],
             )

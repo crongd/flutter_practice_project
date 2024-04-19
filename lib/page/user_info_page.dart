@@ -1,10 +1,22 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_practice_project/page/user_login_page.dart';
 import 'package:flutter_practice_project/page/user_re_password_page.dart';
+import 'package:flutter_practice_project/page/user_verification.dart';
 import 'package:flutter_practice_project/public/loginCheck.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import '../models/UserDTO.dart';
+import '../public/constants.dart';
 
 class UserInfoPage extends StatefulWidget {
-  const UserInfoPage({super.key});
+
+  UserDTO? user;
+
+  UserInfoPage({
+    super.key,
+    this.user
+  });
 
   @override
   State<UserInfoPage> createState() => _UserInfoPageState();
@@ -12,11 +24,25 @@ class UserInfoPage extends StatefulWidget {
 
 class _UserInfoPageState extends State<UserInfoPage> {
 
+  final storage = const FlutterSecureStorage();
+
+  UserDTO? user;
+
   @override
   void initState() {
     super.initState();
     loginChecking();
+    user = widget.user;
+    // get_user_info();
   }
+
+  // void get_user_info() async {
+  //   // 유저 정보 조회
+  //   Response resp = await Dio().get('http://$connectAddr:8080/user_info?userId=${await storage.read(key: 'login')}');
+  //   setState(() {
+  //     user = UserDTO.fromJson(json: resp.data);
+  //   });
+  // }
 
   void loginChecking() async {
     if(!await loginCheck()) {
@@ -67,7 +93,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                                     flex: 6,
                                     child: Container(
                                       width: double.infinity,
-                                      child: Text('jaeho1234'),
+                                      child: Text('${user?.id}'),
                                     )
                                   ),
                                 ],
@@ -87,7 +113,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                                     flex: 6,
                                     child: Container(
                                       width: double.infinity,
-                                      child: Text('2010-01-01'),
+                                      child: Text('${user?.joinDate}'),
                                     )
                                   ),
                                 ],
@@ -116,12 +142,12 @@ class _UserInfoPageState extends State<UserInfoPage> {
                                       flex: 2,
                                         child: Container(
                                           width: double.infinity,
-                                          child: Text('010-1234-1234'),
+                                          child: Text('${user?.tel}'),
                                         )
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 10,),
+                                // SizedBox(height: 10,),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
@@ -136,7 +162,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                                         flex: 2,
                                         child: Container(
                                           width: double.infinity,
-                                          child: Text('jaeho1234@naver.com'),
+                                          child: Text('${user?.email}'),
                                         )
                                     ),
                                   ],
@@ -155,7 +181,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                     onTap: () {
                       print('비밀번호 변경 화면');
                       Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => UserRePasswordPage())
+                        MaterialPageRoute(builder: (context) => UserVerificationPage())
                       );
                     },
                     child: Container(
