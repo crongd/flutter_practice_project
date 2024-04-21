@@ -6,6 +6,7 @@ import 'package:flutter_practice_project/page/port_one_payment_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_practice_project/public/appbar.dart';
+import 'package:iamport_flutter/model/payment_data.dart';
 import 'package:kpostal/kpostal.dart';
 import 'package:flutter_practice_project/public/basic_dialog.dart';
 import 'package:flutter_practice_project/page/item_order_result_page.dart';
@@ -222,14 +223,7 @@ class _ItemPaymentPage extends State<ItemPaymentPage> {
 
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) =>
-                    Payment(
-                      amount: totalPrice,
-                      productName: "${basketList[0].title} 외 ${basketList.length} 개",
-                      buyerName: buyerNameController.text,
-                      buyerTel: buyerPhoneController.text,
-                      buyerPostcode: receiverZipController.text,
-                      buyerAddr: receiverAddress1Controller.text + receiverAddress2Controller.text,
-                    )
+                  Payment()
                 )
               );
               // Navigator.of(context).push(
