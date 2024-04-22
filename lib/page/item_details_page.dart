@@ -252,17 +252,17 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
                   barrierDismissible: false,
                   builder: (BuildContext ctx) {
                     return AlertDialog(
-                      content: Text("장바구니 담았는데 보러 갈래?"),
+                      content: Text("장바구니에 담았습니다. 확인하시겠습니까?"),
                       actions: [
                         TextButton(onPressed: () {
                           Navigator.of(context).pop();
                           Navigator.of(context).push(
                             MaterialPageRoute(builder: (context) => ItemBasketPage())
                           );
-                        }, child: Text("가자")),
+                        }, child: Text("확인")),
                         TextButton(onPressed: () {
                           Navigator.of(context).pop();
-                        }, child: Text("싫어")),
+                        }, child: Text("취소")),
                       ],
                     );
                   });
@@ -354,7 +354,7 @@ class _ItemDetailsPage extends State<ItemDetailsPage> {
                         Dio().delete('http://$connectAddr:8080/review_like?reviewNo=$no&userId=${userId}');
 
                         setState(() {
-                          upCount++;
+                          upCount--;
                         });
                         // Navigator.of(context).pop();
                         // Navigator.of(context).push(

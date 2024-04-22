@@ -186,7 +186,7 @@ class _ItemBasketPage extends State<ItemBasketPage> {
                           });
 
                         } else {
-                          alert(context, "수량은 0이 될 수 없다");
+                          alert(context, "수량은 1보다 작을 수 없습니다.");
                         }
 
                       },
@@ -195,7 +195,6 @@ class _ItemBasketPage extends State<ItemBasketPage> {
                     Text("$amount"),
                     IconButton(
                         onPressed: () {
-                          print("+ 들어옴");
                           var data = {
                             "no" : no,
                             "amount" : amount + 1
@@ -224,7 +223,7 @@ class _ItemBasketPage extends State<ItemBasketPage> {
                               barrierDismissible: false,
                               builder: (BuildContext ctx) {
                                 return AlertDialog(
-                                  content: Text("진짜 삭제할래?"),
+                                  content: Text("정말 삭제 하시겠습니까?"),
                                   actions: [
                                     TextButton(onPressed: () {
                                       var data = {
@@ -239,10 +238,10 @@ class _ItemBasketPage extends State<ItemBasketPage> {
                                       Navigator.of(context).push(
                                           MaterialPageRoute(builder: (context) => ItemBasketPage())
                                       );
-                                    }, child: Text("ㅇㅋ")),
+                                    }, child: Text("삭제")),
                                     TextButton(onPressed: () {
                                       Navigator.of(context).pop();
-                                    }, child: Text("ㄴㄴ")),
+                                    }, child: Text("취소")),
                                   ],
                                 );
                               });

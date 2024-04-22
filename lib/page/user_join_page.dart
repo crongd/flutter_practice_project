@@ -32,13 +32,10 @@ class _UserJoinPage extends State<UserJoinPage> {
 
 
     if(id != "" && pw != "" && email != "" && tel != "") {
-      Dio().post("http://$connectAddr:8080/user_join",
-          options: Options(contentType: Headers.jsonContentType),
-          data: UserDTO(id: id, password: pw, email: email, tel: tel)).toString();
 
       Navigator.of(context).pop();
       Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => UserLoginPage(no: 0, page: "list"))
+          MaterialPageRoute(builder: (context) => PortOneCertificationPage(user: UserDTO(id: id, password: pw, email: email, tel: tel),))
       );
     } else {
       alert(context, "필수 정보가 입력되지 않음.");
@@ -94,11 +91,6 @@ class _UserJoinPage extends State<UserJoinPage> {
                       labelText: '전화번호',
                     ),
                   ),
-                  TextButton(onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => PortOneCertificationPage())
-                    );
-                  }, child: Text('인증')),
                   SizedBox(
                     height: 20,
                   ),
@@ -109,7 +101,7 @@ class _UserJoinPage extends State<UserJoinPage> {
                             backgroundColor: MaterialStateProperty.all(Colors.blue),
                           ),
                           onPressed: join,
-                          child: Text("가입하기",style: TextStyle(color: Colors.white),))),
+                          child: Text("본인인증 후 가입하기",style: TextStyle(color: Colors.white),))),
                     ],
                   )
                 ],
