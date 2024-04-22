@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_practice_project/page/port_one_certification_page.dart';
 import 'package:flutter_practice_project/public/alert.dart';
 import 'package:flutter_practice_project/public/constants.dart';
 import 'package:flutter_practice_project/models/UserDTO.dart';
@@ -93,6 +94,11 @@ class _UserJoinPage extends State<UserJoinPage> {
                       labelText: '전화번호',
                     ),
                   ),
+                  TextButton(onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => PortOneCertificationPage())
+                    );
+                  }, child: Text('인증')),
                   SizedBox(
                     height: 20,
                   ),

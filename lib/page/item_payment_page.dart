@@ -46,17 +46,12 @@ class _ItemPaymentPage extends State<ItemPaymentPage> {
   TextEditingController depositNameController = TextEditingController();
 
   // 결제수단 옵션 선택 변수
-  final List<String> paymentMethodList = [
-    '결제수단선택',
-    '카드 결제',
-    '무통장 입금'
-  ];
 
-  String selectedPaymentMethod = '결제수단선택';
 
   List<ProductDTO> basketList = [];
   int totalPrice = 0;
   int totalAmount = 0;
+  String? userId;
 
   final storage = const FlutterSecureStorage();
 
@@ -73,7 +68,7 @@ class _ItemPaymentPage extends State<ItemPaymentPage> {
         totalAmount += basketList[i].amount!;
       }
     });
-
+    userId = await storage.read(key: 'login');
   }
 
 
@@ -133,12 +128,12 @@ class _ItemPaymentPage extends State<ItemPaymentPage> {
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
-                        Text("외 ${basketList.length - 1} 개",
+                        Text(basketList.length <= 1 ? "" : " 외 ${basketList.length - 1} 개 ",
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        // Text("${numberFormat.format(basketList[0].price)}원"),
+                        Text("${numberFormat.format(basketList[0].price)}원"),
                         Row(
                           children: [
                             const Text('총 수량: '),
@@ -164,38 +159,14 @@ class _ItemPaymentPage extends State<ItemPaymentPage> {
                 child: Column(
                   children: [
                     inputTextField(currentController: buyerNameController, currentHintText: "주문자명"),
-                    inputTextField(currentController: buyerEmailController, currentHintText: "주문자 이메일"),
+                    // inputTextField(currentController: buyerEmailController, currentHintText: "주문자 이메일"),
                     inputTextField(currentController: buyerPhoneController, currentHintText: "주문자 휴대전화(숫자만 입력)", numberOnly: true),
-                    inputTextField(currentController: receiverNameController, currentHintText: "수령자명"),
-                    inputTextField(currentController: receiverPhoneController, currentHintText: "수령자 휴대전화(숫자만 입력)", numberOnly: true),
+                    // inputTextField(currentController: receiverNameController, currentHintText: "수령자명"),
+                    // inputTextField(currentController: receiverPhoneController, currentHintText: "수령자 휴대전화(숫자만 입력)", numberOnly: true),
                     receiverZipTextField(),
                     inputTextField(currentController: receiverAddress1Controller, currentHintText: "기본 주소", isReadOnly: true),
                     inputTextField(currentController: receiverAddress2Controller, currentHintText: "상세 주소"),
-                    paymentMethodDropdownButton(),
-                    if (selectedPaymentMethod == "카드 결제")
-                      Column(children: [
-                        inputTextField(currentController: cardNoController, currentHintText: "카드 번호"),
-                        inputTextField(
-                            currentController: cardAuthController,
-                            currentHintText: "카드명의자 주민번호 앞자리 or 사업자 번호",
-                            currentMaxLength: 10),
-                        inputTextField(
-                            currentController: cardExpiredDateController,
-                            currentHintText: "카드 만료일 (YYYYMM)",
-                            currentMaxLength: 6
-                        ),
-                        inputTextField(
-                            currentController: cardPwdTwoDigitsController,
-                            currentHintText: "카드 비밀번호 앞 2자리",
-                            currentMaxLength: 2
-                        ),
-                      ],
-                      ),
-                    if(selectedPaymentMethod == "무통장 입금")
-                      inputTextField(
-                        currentController: depositNameController,
-                        currentHintText: "입금자명",
-                      )
+                    // paymentMethodDropdownButton(),
                   ],
                 )
             )
@@ -207,23 +178,20 @@ class _ItemPaymentPage extends State<ItemPaymentPage> {
         child: FilledButton(
           onPressed: (){
             if (formKey.currentState!.validate()) {
-              if (selectedPaymentMethod == "결제수단선택") {
-                showDialog(
-                    context: context,
-                    barrierDismissible: true,
-                    builder: (context) {
-                      return BasicDialog(
-                          content: "결제수단 선택하셈",
-                          buttonText: "닫기",
-                          buttonFunction: () => Navigator.of(context).pop()
-                      );
-                    });
-                return;
-              }
 
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) =>
-                  Payment()
+                  PortOnePaymentPage(
+                    title: basketList.length <= 1 ? "${basketList[0].title}" : "${basketList[0].title} 외 ${basketList.length - 1} 개 ",
+                    // merchantUid: merchantUid,
+                    amount: totalPrice,
+                    buyerName: buyerNameController.text,
+                    buyerTel: buyerPhoneController.text,
+                    buyerAddr: "${receiverAddress1Controller.text} ${receiverAddress2Controller.text}",
+                    buyerPostcode: receiverZipController.text,
+                    products: basketList,
+                    userId: userId!,
+                  )
                 )
               );
               // Navigator.of(context).push(
@@ -397,35 +365,6 @@ class _ItemPaymentPage extends State<ItemPaymentPage> {
       )
     );
   }
-
-  Widget paymentMethodDropdownButton() {
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.all(8),
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        border: Border.all(width: 0.5),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: DropdownButton<String>(
-        value: selectedPaymentMethod,
-        onChanged: (value) {
-          setState(() {
-            selectedPaymentMethod = value ?? "";
-          });
-        },
-        underline: Container(),
-        isExpanded: true,
-        items: paymentMethodList.map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-      ),
-    );
-  }
-
 
 }
 
