@@ -36,7 +36,7 @@ class _ItemListPageState extends State<ItemListPage> {
   // String? selectedCategory;
   int cateNo = 0;
   // String categoryName = "카테고리 선택";
-  String title = "제품 리스트 페이지";
+  String title = "상품 검색 결과";
 
 
   @override
@@ -63,7 +63,7 @@ class _ItemListPageState extends State<ItemListPage> {
       });
 
     } else {
-      Response respProduct = await Dio().get("http://$connectAddr:8080/product_search_list?no=$cateNo&search=${widget.search}");
+      Response respProduct = await Dio().get("http://$connectAddr:8080/product_search_list?search=${widget.search}");
       // print(response);
       List<dynamic> productData = respProduct.data;
       List<ProductDTO> products = productData.map((json) => ProductDTO.fromJson(json: json)).toList();
@@ -93,12 +93,6 @@ class _ItemListPageState extends State<ItemListPage> {
           icon: Icon(Icons.navigate_before),
         ),
         actions: [
-          IconButton(
-              onPressed: () {
-
-              },
-              icon: Icon(Icons.search)
-          ),
           IconButton(onPressed: () {
             Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => ItemBasketPage())
@@ -108,6 +102,7 @@ class _ItemListPageState extends State<ItemListPage> {
       ),
       body: Column(
         children: [
+
           Expanded(
             child:GridView.builder(
                 itemCount: productList.length,

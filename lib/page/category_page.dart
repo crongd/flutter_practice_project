@@ -6,6 +6,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_practice_project/main.dart';
 
 import '../models/CategoryDTO.dart';
+import 'item_basket_page.dart';
+import 'item_list_page.dart';
 
 
 class Screen extends StatefulWidget {
@@ -20,6 +22,10 @@ class _ScreenState extends State<Screen> {
   List<CategoryDTO> categoryList = [];
   List<CategoryDTO> rowCategoryList = [];
   int selectedIndex = 0;
+  String title = '카테고리';
+
+  bool isSearching = false;
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -42,7 +48,63 @@ class _ScreenState extends State<Screen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: pub_app("카테고리", context),
+      appBar: AppBar(
+        scrolledUnderElevation: 0,
+        toolbarHeight: 40,
+        title: isSearching
+            ? Row( // 검색 모드일 때 검색창과 검색 버튼을 표시
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _searchController, // 검색 컨트롤러 설정
+                autofocus: true,
+                decoration: InputDecoration(
+                  hintText: "검색...",
+                  border: InputBorder.none,
+                  hintStyle: TextStyle(color: Colors.black),
+                ),
+                style: TextStyle(color: Colors.black),
+                onSubmitted: (value) {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => ItemListPage(no: 0, search: value,))
+                  );
+                },
+              ),
+            ),
+            IconButton(
+              icon: Icon(Icons.search, color: Colors.black),
+              onPressed: () {
+                print(_searchController.text);
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => ItemListPage(no: 0, search: _searchController.text,))
+                );
+              },
+            )
+          ],
+        )
+            : Text(title, style: TextStyle(fontFamily: 'Jalnan'),), // 기본 모드일 때 타이틀 표시
+        centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  if (isSearching) {
+                    // 검색 모드 종료 시 검색어 초기화
+                    _searchController.clear();
+                  }
+                  isSearching = !isSearching; // 검색 모드 상태 변경
+                });
+              },
+              icon: Icon(isSearching ? Icons.cancel : Icons.search) // 검색 모드에 따라 아이콘 변경
+          ),
+          if(!isSearching) // 검색 모드가 아닐 때만 장바구니 아이콘 표시
+            IconButton(onPressed: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => ItemBasketPage())
+              );
+            }, icon: Icon(Icons.shopping_cart))
+        ],
+      ),
       body: Container(
         child: Row(
           children: [
