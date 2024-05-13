@@ -24,6 +24,9 @@ class _UserJoinPage extends State<UserJoinPage> {
   final emailController = TextEditingController();
   final telController = TextEditingController();
 
+  bool idCheck = false;
+  String idCheckTitle = '';
+
   void join() async {
     String id = idController.text;
     String pw = pwController.text;
@@ -31,15 +34,17 @@ class _UserJoinPage extends State<UserJoinPage> {
     String tel = telController.text;
 
 
-    if(id != "" && pw != "" && email != "" && tel != "") {
+    if(id != "" && pw != "" && email != "" && tel != "" && idCheck) {
 
       Navigator.of(context).pop();
       Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => PortOneCertificationPage(user: UserDTO(id: id, password: pw, email: email, tel: tel),))
       );
     } else {
-      alert(context, "필수 정보가 입력되지 않음.");
+      alert(context, "필수 정보가 입력되지 않았거나, 아이디 중복체크가 되지 않았습니다.");
     }
+
+
   }
   
   @override
@@ -60,13 +65,38 @@ class _UserJoinPage extends State<UserJoinPage> {
                 // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Image.asset('assets/images/logo.jpg', height: 200, width: 300,),
-                  TextField(
-                    maxLength: 16,
-                    controller: idController,
-                    decoration: InputDecoration(
-                      labelText: '아이디',
-                    ),
+                  Row(
+                    children: [
+                      Flexible(
+                        flex: 7,
+                        child: TextField(
+                          maxLength: 16,
+                          controller: idController,
+                          decoration: InputDecoration(
+                            labelText: '아이디',
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 2,
+                          child: TextButton(
+                            onPressed: () async {
+                              String id = idController.text;
+                              print(id);
+                              Response check = await Dio().get('http://$connectAddr:8080/user_id_duplication_check?id=$id');
+                              setState(() {
+                               idCheck = true;
+
+                               !check.data ? idCheckTitle = '사용 가능한 아이디 입니다.' : idCheckTitle = '중복된 아이디 입니다.';
+                              });
+                            },
+                            child: Text(
+                                "중복확인",
+                                style: TextStyle(fontSize: 15, color: Colors.black), overflow: TextOverflow.fade,textAlign: TextAlign.center,),)
+                      )
+                    ],
                   ),
+                  if(idCheck) Text(idCheckTitle),
                   TextField(
                     obscureText: true,
                     maxLength: 20,
