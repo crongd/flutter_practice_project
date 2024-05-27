@@ -11,7 +11,9 @@ import 'package:flutter_practice_project/page/item_list_page.dart';
 import 'package:flutter_practice_project/page/main_page.dart';
 import 'package:flutter_practice_project/page/user_my_page.dart';
 import 'package:flutter_practice_project/page/category_page.dart';
+import 'package:flutter_practice_project/public/flutter_local_notification.dart';
 import 'package:flutter_practice_project/public/loginCheck.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 void main() {
   runApp(const MyApp());
@@ -87,6 +89,17 @@ class _MarketPageState extends State<MarketPage> {
 
   @override
   void initState() {
+    // notification
+    FlutterLocalNotification.init();
+    Future.delayed(const Duration(seconds: 3),
+    FlutterLocalNotification.requestNotificationPermission());
+
+    // kakao login
+    KakaoSdk.init(
+      nativeAppKey: 'd1f6d4b09788d44f25f52f96822c7083',
+      javaScriptAppKey: '1dbd0addc4971feb3627a527926b308a'
+    );
+
     super.initState();
 
     setState(() {

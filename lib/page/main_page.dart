@@ -4,8 +4,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_practice_project/page/item_basket_page.dart';
 import 'package:flutter_practice_project/page/item_list_page.dart';
+import 'package:flutter_practice_project/public/flutter_local_notification.dart';
 
 import '../public/constants.dart';
 import 'item_details_page.dart';
@@ -215,7 +217,12 @@ class _MainPageState extends State<MainPage> {
             SizedBox(
               height: 30,
             ),
-            
+            Center(
+              child: TextButton(
+                onPressed: () => FlutterLocalNotification.showNotification(),
+                child: Text('알림 보내기'),
+              ),
+            )
           ],
         ),
       )
